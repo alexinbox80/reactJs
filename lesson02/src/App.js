@@ -1,10 +1,13 @@
 import './App.sass';
-import {Message} from './components/Message';
+import {MessageList} from "./components/MessageList";
 
-function App(props) {
+function App() {
+
+    const [messageList, setMessageList] = useState([]);
+
     return (
         <div className="App">
-            <Message text={ props.text }/>
+            <MessageList messageList/>
         </div>
     );
 }
