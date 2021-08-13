@@ -1,13 +1,12 @@
-import './App.sass';
-import {MessageList} from "./components/MessageList";
-
+import styles from './App.module.sass';
+import {MessageForm} from './components/MessageForm';
+import {MessageList} from './components/MessageList';
 function App() {
 
-    const [messageList, setMessageList] = useState([]);
-
     return (
-        <div className="App">
-            <MessageList messageList/>
+        <div className={styles.position}>
+            <MessageForm />
+            <MessageList />
         </div>
     );
 }

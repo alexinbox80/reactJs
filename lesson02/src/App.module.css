@@ -1,5 +1,6 @@
-.App {
-  text-align: center;
+.position {
+  display: flex;
+  margin: 16px;
 }
 
 /*# sourceMappingURL=App.module.css.map */
