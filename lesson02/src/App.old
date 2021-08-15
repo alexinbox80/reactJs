@@ -1,0 +1,61 @@
+//import {useEffect} from "react";
+import styles from "./App.module.sass";
+import {MessageForm} from "./components/MessageForm";
+import {MessageList} from "./components/MessageList";
+import {ExampleTitle} from "./components/ExampleTitle";
+import {useToggle} from "./hooks/useToggle";
+import {useWindowEvent} from "./hooks/useWindowEvent";
+//import {useDocumentTitle} from './hooks/useDocumentTitle";
+
+const ComponentWithEvent = () => {
+
+    useWindowEvent(
+        'resize',
+        () => {
+            console.log(window)
+        },
+    );
+
+    return <div>
+        ComponentWithEvent
+    </div>
+};
+
+function App() {
+
+    const {onToggle, toggle} = useToggle();
+
+    return (
+        <div className={styles.position}>
+            <button onClick={onToggle}>
+                onToggle
+
+                {
+
+                    toggle ?  ' : \n' + toggle : null
+
+                }
+
+            </button>
+
+            {
+
+                toggle ?  <ComponentWithEvent/> : null
+
+            }
+
+            {
+
+                toggle ?  <ExampleTitle/> : null
+
+            }
+
+
+            <ExampleTitle/>
+            <MessageForm/>
+            <MessageList/>
+        </div>
+    );
+}
+
+export default App;
