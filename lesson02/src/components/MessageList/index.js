@@ -1,7 +1,7 @@
 import {useEffect, useRef} from "react";
 import styles from "./MessageList.module.sass";
 
-export const MessageList = (props) => {
+export const MessageList = ({messageList, nameBot}) => {
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
@@ -9,15 +9,15 @@ export const MessageList = (props) => {
 
     useEffect(() => {
         scrollToBottom()
-    }, [props.messageList]);
+    }, [messageList]);
 
     return (
         <div className={styles.message__list}>
             <ul>
                 {
-                    props.messageList.map(({id, time, text, author}) => (
+                    messageList.map(({id, time, text, author}) => (
                         <li className={
-                            author === 'user'? styles.message__user: styles.message__bot
+                            author === nameBot? styles.message__bot: styles.message__user
                         } key={id}>
                             <p className={styles.message__text}>{text}</p>
                             <span className={styles.message__time}>{time}</span>

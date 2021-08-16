@@ -17,6 +17,10 @@ const userMessage = (id, time, text, author) => ({
 
 const RECEIVEDELAY = 1500;
 
+const NAMEBOT = 'bot';
+const NAMEUSER = 'user';
+
+
 function App() {
 
     const {message, setMessage} = useMessageForm();
@@ -30,26 +34,26 @@ function App() {
 
     const clickHandler = () => {
         if (message.length > 0) {
-            append(userMessage(Date.now(), toHHMMSS(Date.now()), message, 'user'));
+            append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
             setMessage('');
         }
     };
 
     const keyHandler = (event) => {
         if (event.key === 'Enter') {
-            if (message.length > 0) {
-                append(userMessage(Date.now(), toHHMMSS(Date.now()), message, 'user'));
+            if (message.length) {
+                append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
                 setMessage('');
             }
         }
     };
 
     const messageDelay = (fn) => {
+        if (typeof fn !== 'function') {
+            throw new Error('Argument must be a function!');
+        }
+
         const id = setTimeout(() => {
-                if (typeof (fn) !== 'function') {
-                    console.warn('fn is not a function!');
-                    return undefined;
-                }
                 fn();
             }
             , RECEIVEDELAY);
@@ -60,25 +64,26 @@ function App() {
     }
 
     const botMessage = (message) => {
-        append(userMessage(Date.now(), toHHMMSS(Date.now()), message, 'bot'));
+        append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
     }
 
     useEffect(() => {
         messageDelay(() => {
-            botMessage('Привет! я бот Петрович')
+            botMessage('Привет! я бот Петрович');
         });
+
         messageDelay(() => {
-            botMessage('Как к Вам обращаться?')
+            botMessage('Как к Вам обращаться?');
         });
     }, []);
 
     useDidUpdate(() => {
         const userName = messageList[messageList.length - 1].author;
 
-        if (userName !== 'bot') {
+        if (userName !== NAMEBOT) {
             const userText = messageList[messageList.length - 1].text;
             messageDelay(() => {
-                botMessage('Здравствуйте, ' +  userText +' !')
+                botMessage('Здравствуйте, ' + userText + ' !')
             });
 
             messageDelay(() => {
@@ -94,6 +99,7 @@ function App() {
                     <MessageTitle/>
                     <MessageList
                         messageList={messageList}
+                        nameBot={NAMEBOT}
                     />
                 </div>
                 <MessageForm
