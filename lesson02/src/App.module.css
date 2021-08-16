@@ -9,58 +9,9 @@
   margin: 20px;
 }
 
-.header__title {
-  color: rgba(0, 0, 0, 0.6);
-  text-align: center;
-}
-
-.message__list {
-  height: calc(80vh - 37px);
-  overflow-y: auto;
-}
-
-.message__user {
-  width: fit-content;
-  margin-left: auto;
-  text-align: right;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 5px;
-}
-
-.message__text {
-  text-align: left;
-  color: rgba(0, 0, 0, 0.6);
-  margin-top: 0;
-}
-
-.message__time {
-  color: rgba(0, 0, 0, 0.6);
-}
-
 .footer {
   display: flex;
   height: 10vh;
-}
-
-.footer__input {
-  width: 80%;
-  padding: 0 22px;
-  border-top-left-radius: 23px;
-  border-bottom-left-radius: 23px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.footer__button {
-  width: 20%;
-  border-top-right-radius: 23px;
-  border-bottom-right-radius: 23px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  color: rgba(0, 0, 0, 0.6);
 }
 
 /*# sourceMappingURL=App.module.css.map */

@@ -1,8 +1,6 @@
 import {useState} from 'react';
 
-
 export const useMessageList = () => {
-
     const [messageList, setMessageList] = useState([]);
 
     const append = (...messages) => {

@@ -1,8 +1,11 @@
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import styles from "./App.module.sass";
+import {MessageTitle} from "./components/MessageTitle";
 import {useMessageForm} from "./hooks/useMessageForm";
+import {MessageForm} from "./components/MessageForm";
 import {useMessageList} from "./hooks/useMessageList";
-//import {useMessageList} from "./hooks/useMessageList";
+import {MessageList} from "./components/MessageList";
+import {useDidUpdate} from "./hooks/useDidUpdate";
 
 const userMessage = (id, time, text, author) => ({
         id,
@@ -12,10 +15,11 @@ const userMessage = (id, time, text, author) => ({
     }
 );
 
+const RECEIVEDELAY = 1500;
+
 function App() {
 
     const {message, setMessage} = useMessageForm();
-
     const [messageList, {append}] = useMessageList([]);
 
     const inputHandler = (event) => {
@@ -40,84 +44,55 @@ function App() {
         }
     };
 
-    const MessageTitle = () => {
-        return (
-            <h1 className={styles.header__title}>Chat Bot ver:0.1</h1>
-        );
-    };
+    const messageDelay = (fn) => {
+        const id = setTimeout(() => {
+                if (typeof (fn) !== 'function') {
+                    console.warn('fn is not a function!');
+                    return undefined;
+                }
+                fn();
+            }
+            , RECEIVEDELAY);
 
-    const MessageDesk = (props) => {
-
-        const messagesEndRef = useRef(null);
-        const scrollToBottom = () => {
-            messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
-        };
-
-        useEffect(() => {
-            scrollToBottom()
-        }, [props.messageList]);
-
-
-        if (props.messageList.length > 0) {
-            console.dir(props.messageList);
-            //scrollToRef("last");
+        return () => {
+            clearTimeout(id);
         }
+    }
 
-        return (
-            <div className={styles.message__list}>
-                <ul>
-                    {
-                       /* props.messageList.map(({id, time, text, author}) => (
-                            <li className={styles.message__user} key={id}>
-                                <h3>name: {author}</h3>
-                                <p>message: {text}</p>
-                                <p>time: {time}</p>
-                                <p>id: {id}</p>
-                            </li>
-                        ))*/
+    const botMessage = (message) => {
+        append(userMessage(Date.now(), toHHMMSS(Date.now()), message, 'bot'));
+    }
 
+    useEffect(() => {
+        messageDelay(() => {
+            botMessage('Привет! я бот Петрович')
+        });
+        messageDelay(() => {
+            botMessage('Как к Вам обращаться?')
+        });
+    }, []);
 
-                        props.messageList.map(({id, time, text, author}) => (
-                            <li className={styles.message__user} key={id}>
-                                <p className={styles.message__text}>{text}</p>
-                                <span className={styles.message__time} >{time}</span>
-                            </li>
-                        ))
-                    }
-                </ul>
-                <div ref={messagesEndRef}/>
-            </div>
-        );
+    useDidUpdate(() => {
+        const userName = messageList[messageList.length - 1].author;
 
-    };
+        if (userName !== 'bot') {
+            const userText = messageList[messageList.length - 1].text;
+            messageDelay(() => {
+                botMessage('Здравствуйте, ' +  userText +' !')
+            });
 
-    const MessageForm = (props) => {
-        return (
-            <div className={styles.footer}>
-                <input
-                    className={styles.footer__input}
-                    type="text"
-                    placeholder="Input message"
-                    onChange={props.onChange}
-                    onKeyDown={props.onKeyDown}
-                    value={props.value}
-                />
-                <button
-                    className={styles.footer__button}
-                    type="button"
-                    onClick={props.onClick}>
-                    Send Message
-                </button>
-            </div>
-        );
-    };
+            messageDelay(() => {
+                botMessage('Чем могу помочь?');
+            });
+        }
+    }, [messageList]);
 
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
                 <div className={styles.top}>
                     <MessageTitle/>
-                    <MessageDesk
+                    <MessageList
                         messageList={messageList}
                     />
                 </div>
