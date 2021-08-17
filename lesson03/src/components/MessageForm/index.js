@@ -1,35 +1,43 @@
-import {useRef, useEffect} from  "react";
-import styles from "./MessageForm.module.sass";
-import PropTypes from 'prop-types';
+import {useEffect} from "react";
+import PropTypes from "prop-types";
+import {Input, Button} from "@material-ui/core";
+import {useStyles} from "./styles";
 
 export const MessageForm = (props) => {
-    const inputRef = useRef(null);
+    const classes = useStyles();
 
     useEffect(() => {
-        inputRef.current?.focus();
-    }, []);
+        props.inputFocus.current?.focus();
+    }, [ props.inputFocus]);
 
     return (
-        <div className={styles.footer}>
-            <input
-                className={styles.footer__input}
-                type="text"
+        <div className={classes.footer}>
+            <Input
+                className={classes.input}
+                id="input__message"
                 placeholder="Input message and press Enter"
-                ref={inputRef}
+                type="text"
+                inputRef={props.inputFocus}
+                disableUnderline={true}
                 onChange={props.onChange}
                 onKeyDown={props.onKeyDown}
                 value={props.value}
             />
-            <button
-                className={styles.footer__button}
-                type="button"
+            <Button
+                className={classes.button}
+                id="input__button"
+                variant="outlined"
                 onClick={props.onClick}>
                 Send Message
-            </button>
+            </Button>
         </div>
     );
 };
 
 MessageForm.propTypes = {
-    value: PropTypes.string.isRequired
+    inputFocus: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
 };

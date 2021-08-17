@@ -19,6 +19,7 @@ export const MessageList = ({messageList, nameBot}) => {
                         <li className={
                             author === nameBot? styles.message__bot: styles.message__user
                         } key={id}>
+                            <span className={styles.message__author}>{author}</span>
                             <p className={styles.message__text}>{text}</p>
                             <span className={styles.message__time}>{time}</span>
                         </li>
