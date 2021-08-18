@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["MessageList.module.sass"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;;;AAEF;EACE;EACA;EACA;EACA;;;AAEF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAEF;EACE;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;;AAEF;EACE;EACA;EACA;;;AAEF;EACE","file":"MessageList.module.css"}
+{"version":3,"sourceRoot":"","sources":["MessageList.module.sass"],"names":[],"mappings":"AAAA;EACI;EACA;EACA","file":"MessageList.module.css"}

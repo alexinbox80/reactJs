@@ -17,6 +17,7 @@ export const MessageForm = (props) => {
                 id="input__message"
                 placeholder="Input message and press Enter"
                 type="text"
+                autoFocus={true}
                 inputRef={props.inputFocus}
                 disableUnderline={true}
                 onChange={props.onChange}

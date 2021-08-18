@@ -4,7 +4,6 @@ import styles from "./App.module.sass";
 import {useMessageForm} from "./hooks/useMessageForm";
 import {useMessageList} from "./hooks/useMessageList";
 import {useDidUpdate} from "./hooks/useDidUpdate";
-import {useChatList} from "./hooks/useChatList";
 
 import {MessageTitle} from "./components/MessageTitle";
 import {MessageForm} from "./components/MessageForm";
@@ -18,17 +17,12 @@ const userMessage = (id, time, text, author) => ({
     author
 });
 
-const chatItem = (id, name) => ({
-    id,
-    name
-});
-
 const chatList = [
-    {id: 1, name: '1st room'},
-    {id: 2, name: '2nd room'},
-    {id: 3, name: '3rd room'},
-    {id: 4, name: '4th room'},
-    {id: 5, name: '5th room'},
+    {id: 1, name: '1st chat room'},
+    {id: 2, name: '2nd chat room'},
+    {id: 3, name: '3rd chat room'},
+    {id: 4, name: '4th chat room'},
+    {id: 5, name: '5th chat room'},
 ];
 
 const PROJECTVERSION = 'v0.2';
@@ -37,11 +31,6 @@ const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
 function App() {
-
-    const [chatList1, {chatAdd}] = useChatList([
-        {id:1, name:'root'},
-        {id:2, name:'root'},
-    ]);
 
     const {message, setMessage} = useMessageForm();
     const [messageList, {append}] = useMessageList([]);
@@ -88,31 +77,23 @@ function App() {
         return () => {
             clearTimeout(id);
         }
-    }
-/*
-    useEffect(() => {
-        if(chatList.length < 6) {
-            chatAdd(chatItem(1, '1st room'));
-            chatAdd(chatItem(2, '2nd room'));
-            chatAdd(chatItem(3, '3th room'));
-            chatAdd(chatItem(4, '4th room'));
-            chatAdd(chatItem(5, '5th room'));
-        }
-    }, [chatList]);
-*/
+    };
+
     const botMessage = (message) => {
         append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
-    }
+    };
 
     useEffect(() => {
-        messageDelay(() => {
-            botMessage('Привет! я бот Петрович');
-        });
+        if(messageList.length === 0) {
+            messageDelay(() => {
+                botMessage('Привет! я бот Петрович');
+            });
 
-        messageDelay(() => {
-            botMessage('Как к Вам обращаться?');
-        });
-    }, []);
+            messageDelay(() => {
+                botMessage('Как к Вам обращаться?');
+            });
+        }
+    }, [messageList]);
 
     useDidUpdate(() => {
         const userName = messageList[messageList.length - 1].author;
