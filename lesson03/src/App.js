@@ -4,6 +4,7 @@ import styles from "./App.module.sass";
 import {useMessageForm} from "./hooks/useMessageForm";
 import {useMessageList} from "./hooks/useMessageList";
 import {useDidUpdate} from "./hooks/useDidUpdate";
+import {useChatList} from "./hooks/useChatList";
 
 import {MessageTitle} from "./components/MessageTitle";
 import {MessageForm} from "./components/MessageForm";
@@ -17,13 +18,10 @@ const userMessage = (id, time, text, author) => ({
     author
 });
 
-const chatList = [
-    {id: 1, name: '1st chat room'},
-    {id: 2, name: '2nd chat room'},
-    {id: 3, name: '3rd chat room'},
-    {id: 4, name: '4th chat room'},
-    {id: 5, name: '5th chat room'},
-];
+const chatItem = (id, name) => ({
+    id,
+    name
+});
 
 const PROJECTVERSION = 'v0.2';
 const RECEIVEDELAY = 1500;
@@ -32,6 +30,7 @@ const NAMEUSER = 'user';
 
 function App() {
 
+    const [chatList, {chatAdd}] = useChatList([]);
     const {message, setMessage} = useMessageForm();
     const [messageList, {append}] = useMessageList([]);
     const inputRef = useRef(null);
@@ -84,7 +83,17 @@ function App() {
     };
 
     useEffect(() => {
-        if(messageList.length === 0) {
+        if (!chatList.length) {
+            chatAdd(chatItem(1, '1st room'));
+            chatAdd(chatItem(2, '2nd room'));
+            chatAdd(chatItem(3, '3th room'));
+            chatAdd(chatItem(4, '4th room'));
+            chatAdd(chatItem(5, '5th room'));
+        }
+    }, [chatList]);
+
+    useEffect(() => {
+        if (!messageList.length) {
             messageDelay(() => {
                 botMessage('Привет! я бот Петрович');
             });
@@ -118,8 +127,8 @@ function App() {
                     <div className={styles.body}>
                         <ChatList className={styles.chat} chatList={chatList}/>
                         <MessageList className={styles.list}
-                            messageList={messageList}
-                            nameBot={NAMEBOT}
+                                     messageList={messageList}
+                                     nameBot={NAMEBOT}
                         />
                     </div>
                 </div>

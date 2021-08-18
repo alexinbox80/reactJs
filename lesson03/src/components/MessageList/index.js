@@ -28,4 +28,5 @@ export const MessageList = ({messageList, nameBot}) => {
 
 MessageList.propTypes = {
     messageList: PropTypes.array.isRequired,
+    nameBot: PropTypes.string.isRequired,
 };
