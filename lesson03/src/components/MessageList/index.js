@@ -17,9 +17,16 @@ export const MessageList = ({messageList, nameBot}) => {
     return (
         <div className={styles.message__list}>
             <List>
-                <MessageItem
-                    messageList={messageList}
-                    nameBot={nameBot}/>
+                {
+                    messageList.map(({id, time, text, author}) => (
+                        <MessageItem
+                            key={id}
+                            messageItemTime={time}
+                            messageItemText={text}
+                            messageItemAuthor={author}
+                            nameBot={nameBot}/>
+                    ))
+                }
             </List>
             <div ref={messagesEndRef}/>
         </div>

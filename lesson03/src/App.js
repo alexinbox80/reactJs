@@ -23,7 +23,7 @@ const chatItem = (id, name) => ({
     name
 });
 
-const PROJECTVERSION = 'v0.2';
+const PROJECTVERSION = 'v0.3';
 const RECEIVEDELAY = 1500;
 const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
@@ -46,7 +46,7 @@ function App() {
     );
 
     const clickHandler = () => {
-        if (message.length > 0) {
+        if (message.length) {
             append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
             setMessage('');
 
@@ -110,7 +110,7 @@ function App() {
         if (userName !== NAMEBOT) {
             const userText = messageList[messageList.length - 1].text;
             messageDelay(() => {
-                botMessage('Здравствуйте, ' + userText + ' !')
+                botMessage('Здравствуйте, ' + userText + '!')
             });
 
             messageDelay(() => {
