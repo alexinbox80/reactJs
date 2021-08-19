@@ -23,7 +23,7 @@ const chatItem = (id, name) => ({
     name
 });
 
-const PROJECTVERSION = 'v0.3';
+const PROJECTVERSION = 'v0.4';
 const RECEIVEDELAY = 1500;
 const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
