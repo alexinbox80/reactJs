@@ -1,4 +1,7 @@
 import {useEffect, useRef} from "react";
+import PropTypes from "prop-types";
+import {MessageItem} from "../MessageItem";
+import {List} from "@material-ui/core";
 import styles from "./MessageList.module.sass";
 
 export const MessageList = ({messageList, nameBot}) => {
@@ -13,19 +16,24 @@ export const MessageList = ({messageList, nameBot}) => {
 
     return (
         <div className={styles.message__list}>
-            <ul>
+            <List>
                 {
                     messageList.map(({id, time, text, author}) => (
-                        <li className={
-                            author === nameBot? styles.message__bot: styles.message__user
-                        } key={id}>
-                            <p className={styles.message__text}>{text}</p>
-                            <span className={styles.message__time}>{time}</span>
-                        </li>
+                        <MessageItem
+                            key={id}
+                            messageItemTime={time}
+                            messageItemText={text}
+                            messageItemAuthor={author}
+                            nameBot={nameBot}/>
                     ))
                 }
-            </ul>
+            </List>
             <div ref={messagesEndRef}/>
         </div>
     );
+};
+
+MessageList.propTypes = {
+    messageList: PropTypes.array.isRequired,
+    nameBot: PropTypes.string.isRequired,
 };

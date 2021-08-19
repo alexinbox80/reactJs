@@ -1,41 +1,56 @@
-import {useEffect} from "react";
+import {useRef, useEffect} from "react";
 import styles from "./App.module.sass";
-import {MessageTitle} from "./components/MessageTitle";
+
 import {useMessageForm} from "./hooks/useMessageForm";
-import {MessageForm} from "./components/MessageForm";
 import {useMessageList} from "./hooks/useMessageList";
-import {MessageList} from "./components/MessageList";
 import {useDidUpdate} from "./hooks/useDidUpdate";
+import {useChatList} from "./hooks/useChatList";
+
+import {MessageTitle} from "./components/MessageTitle";
+import {MessageForm} from "./components/MessageForm";
+import {MessageList} from "./components/MessageList";
+import {ChatList} from "./components/ChatList";
 
 const userMessage = (id, time, text, author) => ({
-        id,
-        time,
-        text,
-        author
-    }
-);
+    id,
+    time,
+    text,
+    author
+});
 
+const chatItem = (id, name) => ({
+    id,
+    name
+});
+
+const PROJECTVERSION = 'v0.3';
 const RECEIVEDELAY = 1500;
-
 const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
-
 function App() {
 
+    const [chatList, {chatAdd}] = useChatList([]);
     const {message, setMessage} = useMessageForm();
     const [messageList, {append}] = useMessageList([]);
+    const inputRef = useRef(null);
 
     const inputHandler = (event) => {
         setMessage(event.target.value);
     };
 
-    const toHHMMSS = (mseconds) => (new Date(mseconds).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"));
+    const toHHMMSS = (mseconds) => (
+        new Date(mseconds)
+            .toTimeString()
+            .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
+    );
 
     const clickHandler = () => {
-        if (message.length > 0) {
+        if (message.length) {
             append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
             setMessage('');
+
+            inputRef.current?.focus();
         }
     };
 
@@ -61,21 +76,33 @@ function App() {
         return () => {
             clearTimeout(id);
         }
-    }
+    };
 
     const botMessage = (message) => {
         append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
-    }
+    };
 
     useEffect(() => {
-        messageDelay(() => {
-            botMessage('Привет! я бот Петрович');
-        });
+        if (!chatList.length) {
+            chatAdd(chatItem(1, '1st room'));
+            chatAdd(chatItem(2, '2nd room'));
+            chatAdd(chatItem(3, '3th room'));
+            chatAdd(chatItem(4, '4th room'));
+            chatAdd(chatItem(5, '5th room'));
+        }
+    }, [chatList]);
 
-        messageDelay(() => {
-            botMessage('Как к Вам обращаться?');
-        });
-    }, []);
+    useEffect(() => {
+        if (!messageList.length) {
+            messageDelay(() => {
+                botMessage('Привет! я бот Петрович');
+            });
+
+            messageDelay(() => {
+                botMessage('Как к Вам обращаться?');
+            });
+        }
+    }, [messageList]);
 
     useDidUpdate(() => {
         const userName = messageList[messageList.length - 1].author;
@@ -83,7 +110,7 @@ function App() {
         if (userName !== NAMEBOT) {
             const userText = messageList[messageList.length - 1].text;
             messageDelay(() => {
-                botMessage('Здравствуйте, ' + userText + ' !')
+                botMessage('Здравствуйте, ' + userText + '!')
             });
 
             messageDelay(() => {
@@ -95,17 +122,21 @@ function App() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
-                <div className={styles.top}>
-                    <MessageTitle/>
-                    <MessageList
-                        messageList={messageList}
-                        nameBot={NAMEBOT}
-                    />
+                <div>
+                    <MessageTitle ver={PROJECTVERSION}/>
+                    <div className={styles.body}>
+                        <ChatList className={styles.chat} chatList={chatList}/>
+                        <MessageList className={styles.list}
+                                     messageList={messageList}
+                                     nameBot={NAMEBOT}
+                        />
+                    </div>
                 </div>
                 <MessageForm
+                    inputFocus={inputRef}
                     onChange={inputHandler}
-                    onClick={(e) => clickHandler(e)}
-                    onKeyDown={(e) => keyHandler(e)}
+                    onClick={(event) => clickHandler(event)}
+                    onKeyDown={(event) => keyHandler(event)}
                     value={message}
                 />
             </div>
