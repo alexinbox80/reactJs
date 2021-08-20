@@ -6,10 +6,17 @@ import {useMessageList} from "./hooks/useMessageList";
 import {useDidUpdate} from "./hooks/useDidUpdate";
 import {useChatList} from "./hooks/useChatList";
 
+import {Header} from "./components/Header";
 import {MessageTitle} from "./components/MessageTitle";
 import {MessageForm} from "./components/MessageForm";
 import {MessageList} from "./components/MessageList";
 import {ChatList} from "./components/ChatList";
+
+import {Switch, Route} from "react-router-dom";
+import {Home} from "./pages/Home";
+import {Profile} from "./pages/Profile";
+import {Chats} from "./pages/Chats";
+import {NoMatch} from "./pages/NoMatch";
 
 const userMessage = (id, time, text, author) => ({
     id,
@@ -122,23 +129,38 @@ function App() {
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
-                <div>
-                    <MessageTitle ver={PROJECTVERSION}/>
-                    <div className={styles.body}>
-                        <ChatList className={styles.chat} chatList={chatList}/>
-                        <MessageList className={styles.list}
-                                     messageList={messageList}
-                                     nameBot={NAMEBOT}
+                <Header/>
+                <Switch>
+                    <Route path="/chats">
+                        <Chats/>
+                    </Route>
+                    <Route path="/profile">
+                        <Profile/>
+                    </Route>
+                    <Route exact path="/">
+                        <Home/>
+                        <div>
+                            <MessageTitle ver={PROJECTVERSION}/>
+                            <div className={styles.body}>
+                                <ChatList className={styles.chat} chatList={chatList}/>
+                                <MessageList className={styles.list}
+                                             messageList={messageList}
+                                             nameBot={NAMEBOT}
+                                />
+                            </div>
+                        </div>
+                        <MessageForm
+                            inputFocus={inputRef}
+                            onChange={inputHandler}
+                            onClick={(event) => clickHandler(event)}
+                            onKeyDown={(event) => keyHandler(event)}
+                            value={message}
                         />
-                    </div>
-                </div>
-                <MessageForm
-                    inputFocus={inputRef}
-                    onChange={inputHandler}
-                    onClick={(event) => clickHandler(event)}
-                    onKeyDown={(event) => keyHandler(event)}
-                    value={message}
-                />
+                    </Route>
+                    <Route path="*">
+                        <NoMatch/>
+                    </Route>
+                </Switch>
             </div>
         </div>
     );
