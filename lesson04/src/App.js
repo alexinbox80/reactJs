@@ -7,10 +7,10 @@ import {useDidUpdate} from "./hooks/useDidUpdate";
 import {useChatList} from "./hooks/useChatList";
 
 import {Header} from "./components/Header";
-import {MessageTitle} from "./components/MessageTitle";
-import {MessageForm} from "./components/MessageForm";
-import {MessageList} from "./components/MessageList";
-import {ChatList} from "./components/ChatList";
+// import {MessageTitle} from "./components/MessageTitle";
+// import {MessageForm} from "./components/MessageForm";
+// import {MessageList} from "./components/MessageList";
+// import {ChatList} from "./components/ChatList";
 
 import {Switch, Route} from "react-router-dom";
 import {Home} from "./pages/Home";
@@ -138,18 +138,11 @@ function App() {
                         <Profile/>
                     </Route>
                     <Route exact path="/">
-                        <Home/>
-                        <div>
-                            <MessageTitle ver={PROJECTVERSION}/>
-                            <div className={styles.body}>
-                                <ChatList className={styles.chat} chatList={chatList}/>
-                                <MessageList className={styles.list}
-                                             messageList={messageList}
-                                             nameBot={NAMEBOT}
-                                />
-                            </div>
-                        </div>
-                        <MessageForm
+                        <Home
+                            projectVersion={PROJECTVERSION}
+                            chatList={chatList}
+                            messageList={messageList}
+                            nameBot={NAMEBOT}
                             inputFocus={inputRef}
                             onChange={inputHandler}
                             onClick={(event) => clickHandler(event)}

@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
+import styles from "./Profile.module.sass"
 
 export const Profile = (props) => {
     return (
-        <div>
+        <div className={styles.content}>
             ProfilePage
         </div>
     );
