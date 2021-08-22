@@ -1,16 +1,13 @@
-import {useRef, useEffect} from "react";
+import {useRef, useEffect, useState} from "react";
+import faker from "faker";
 import styles from "./App.module.sass";
 
 import {useMessageForm} from "./hooks/useMessageForm";
 import {useMessageList} from "./hooks/useMessageList";
 import {useDidUpdate} from "./hooks/useDidUpdate";
-import {useChatList} from "./hooks/useChatList";
+//import {useChatList} from "./hooks/useChatList";
 
 import {Header} from "./components/Header";
-// import {MessageTitle} from "./components/MessageTitle";
-// import {MessageForm} from "./components/MessageForm";
-// import {MessageList} from "./components/MessageList";
-// import {ChatList} from "./components/ChatList";
 
 import {Switch, Route} from "react-router-dom";
 import {Home} from "./pages/Home";
@@ -25,9 +22,11 @@ const userMessage = (id, time, text, author) => ({
     author
 });
 
-const chatItem = (id, name) => ({
-    id,
-    name
+const createChats = () => ({
+    id: faker.datatype.uuid(),
+    title: faker.lorem.word(),
+    description: faker.lorem.words(),
+    content: faker.lorem.paragraphs(),
 });
 
 const PROJECTVERSION = 'v0.4';
@@ -37,7 +36,8 @@ const NAMEUSER = 'user';
 
 function App() {
 
-    const [chatList, {chatAdd}] = useChatList([]);
+    //const [chatList, {chatAdd}] = useChatList([]);
+    const [chats, setChats] = useState([]);
     const {message, setMessage} = useMessageForm();
     const [messageList, {append}] = useMessageList([]);
     const inputRef = useRef(null);
@@ -54,7 +54,7 @@ function App() {
 
     const clickHandler = () => {
         if (message.length) {
-            append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+            append(1, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
             setMessage('');
 
             inputRef.current?.focus();
@@ -64,7 +64,7 @@ function App() {
     const keyHandler = (event) => {
         if (event.key === 'Enter') {
             if (message.length) {
-                append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+                append(1, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
                 setMessage('');
             }
         }
@@ -86,18 +86,28 @@ function App() {
     };
 
     const botMessage = (message) => {
-        append(userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
+        append(1, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
     };
 
     useEffect(() => {
-        if (!chatList.length) {
-            chatAdd(chatItem(1, '1st room'));
-            chatAdd(chatItem(2, '2nd room'));
-            chatAdd(chatItem(3, '3th room'));
-            chatAdd(chatItem(4, '4th room'));
-            chatAdd(chatItem(5, '5th room'));
-        }
-    }, [chatList]);
+
+        const newChat = Array.from({
+            length: 5,
+        }).map(createChats);
+
+        setChats(newChat);
+
+    }, []);
+
+    // useEffect(() => {
+    //     if (!chatList.length) {
+    //         chatAdd(chatItem(1, '1st room'));
+    //         chatAdd(chatItem(2, '2nd room'));
+    //         chatAdd(chatItem(3, '3th room'));
+    //         chatAdd(chatItem(4, '4th room'));
+    //         chatAdd(chatItem(5, '5th room'));
+    //     }
+    // }, [chatList]);
 
     useEffect(() => {
         if (!messageList.length) {
@@ -112,10 +122,42 @@ function App() {
     }, [messageList]);
 
     useDidUpdate(() => {
-        const userName = messageList[messageList.length - 1].author;
+        const messageListLength = messageList?.filter(({chatId}) => chatId === 1).length;
+        //console.log(messageListLength);
+
+        const userName = messageList?.filter(({chatId}) => chatId === 1)[messageListLength - 1].message[0].author;
+        //console.log(userName);
+
+        const userText = messageList?.filter(({chatId}) => chatId === 1)[messageListLength - 1].message[0].text;
+        //console.log(userText);
+
+        // const currentMessages = messageList?.filter(({chatId}) => chatId === 1);
+        //
+        // //console.log('currentMessages ', currentMessages[0].messages);
+        //
+        // currentMessages.forEach((item) => {
+        //     console.log('length ', currentMessages.length);
+        //     console.log('author ', item.message[0].author);
+        //
+        //     const userName = item.message[0].author;
+        //
+        //     if (userName !== NAMEBOT) {
+        //         const userText = item.message[0].text;
+        //
+        //         console.log('name ', userName);
+        //         console.log('text ', userText);
+        //
+        //         //messageDelay(() => {
+        //         ///    botMessage('Здравствуйте, ' + userText + '!')
+        //         //});
+        //         //
+        //         // messageDelay(() => {
+        //         //     botMessage('Чем могу помочь?');
+        //         // });
+        //     }
+        // })
 
         if (userName !== NAMEBOT) {
-            const userText = messageList[messageList.length - 1].text;
             messageDelay(() => {
                 botMessage('Здравствуйте, ' + userText + '!')
             });
@@ -140,7 +182,7 @@ function App() {
                     <Route exact path="/">
                         <Home
                             projectVersion={PROJECTVERSION}
-                            chatList={chatList}
+                            chatList={chats}
                             messageList={messageList}
                             nameBot={NAMEBOT}
                             inputFocus={inputRef}

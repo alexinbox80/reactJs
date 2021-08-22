@@ -7,6 +7,7 @@ import {MessageForm} from "../../components/MessageForm";
 
 import styles from "./Home.module.sass";
 import PropTypes from "prop-types";
+import {Redirect, Route, useParams} from "react-router-dom";
 
 export const Home = (props) => {
     const {
@@ -21,15 +22,47 @@ export const Home = (props) => {
         value
     } = props;
 
+    const {chatId} = useParams();
+
+    const currentChat = chatList?.find(({id}) => id === chatId);
+
+    if (!currentChat) {
+        //return <Redirect to="/NoMatch"/>
+    }
+
+    let messages = [];
+
+    const currentMessages = messageList?.filter(({chatId}) => chatId === 1)
+        .forEach((item) =>
+        {
+            for (let key in item.message) {
+                messages.push({
+                    id: item.message[key].id,
+                    time: item.message[key].time,
+                    text: item.message[key].text,
+                    author: item.message[key].author,
+                });
+            }
+        });
+
     return (
-        <div>
-            <MessageTitle ver={projectVersion}/>
+        <>
             <div className={styles.body}>
-                <ChatList className={styles.chat} chatList={chatList}/>
-                <MessageList className={styles.list}
-                             messageList={messageList}
-                             nameBot={nameBot}
-                />
+                <div className={styles.chats}>
+                    <ChatList chatList={chatList}/>
+                </div>
+                {/*<Route path='/home/:chatId'>*/}
+                <div className={styles.messages}>
+                    <MessageTitle
+                        title={chatList[0]?.title}
+                        ver={projectVersion}/>
+                    <MessageList
+                        // messageList={messageList}
+                        messageList={messages}
+                        nameBot={nameBot}
+                    />
+                </div>
+                {/*</Route>*/}
             </div>
             <MessageForm
                 inputFocus={inputFocus}
@@ -38,7 +71,7 @@ export const Home = (props) => {
                 onKeyDown={onKeyDown}
                 value={value}
             />
-        </div>
+        </>
     );
 };
 
@@ -53,4 +86,3 @@ Home.propTypes = {
     onClick: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
 };
-
