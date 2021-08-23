@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import PropTypes from "prop-types";
 import {MessageItem} from "../MessageItem";
 import {List} from "@material-ui/core";
@@ -6,6 +6,7 @@ import styles from "./MessageList.module.sass";
 
 export const MessageList = ({messageList, nameBot}) => {
     const messagesEndRef = useRef(null);
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({behavior: "smooth"})
     };

@@ -3,7 +3,7 @@ import {ChatItem} from "../ChatItem";
 import {List, ListItem} from "@material-ui/core";
 import styles from "./ChatList.module.sass";
 import {Link as RouterLink} from "react-router-dom";
-import ListItemText from "@material-ui/core/ListItemText";
+//import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
 
 export const ChatList = ({chatList}) => {

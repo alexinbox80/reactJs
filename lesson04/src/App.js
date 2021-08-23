@@ -1,19 +1,19 @@
-import {useRef, useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import faker from "faker";
 import styles from "./App.module.sass";
 
 import {useMessageForm} from "./hooks/useMessageForm";
 import {useMessageList} from "./hooks/useMessageList";
 import {useDidUpdate} from "./hooks/useDidUpdate";
-//import {useChatList} from "./hooks/useChatList";
 
 import {Header} from "./components/Header";
 
-import {Switch, Route} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import {Home} from "./pages/Home";
 import {Profile} from "./pages/Profile";
 import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
+//import {useChatList} from "./hooks/useChatList";
 
 const userMessage = (id, time, text, author) => ({
     id,
@@ -22,12 +22,18 @@ const userMessage = (id, time, text, author) => ({
     author
 });
 
+const uuid = () => faker.datatype.uuid();
+
+const chatUuId = uuid();
+
+
 const createChats = () => ({
-    id: faker.datatype.uuid(),
+    id: uuid(),
     title: faker.lorem.word(),
     description: faker.lorem.words(),
     content: faker.lorem.paragraphs(),
 });
+
 
 const PROJECTVERSION = 'v0.4';
 const RECEIVEDELAY = 1500;
@@ -54,7 +60,7 @@ function App() {
 
     const clickHandler = () => {
         if (message.length) {
-            append(1, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+            append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
             setMessage('');
 
             inputRef.current?.focus();
@@ -64,7 +70,7 @@ function App() {
     const keyHandler = (event) => {
         if (event.key === 'Enter') {
             if (message.length) {
-                append(1, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+                append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
                 setMessage('');
             }
         }
@@ -86,7 +92,7 @@ function App() {
     };
 
     const botMessage = (message) => {
-        append(1, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
+        append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
     };
 
     useEffect(() => {
@@ -94,6 +100,8 @@ function App() {
         const newChat = Array.from({
             length: 5,
         }).map(createChats);
+
+        newChat[0].id = chatUuId;
 
         setChats(newChat);
 
@@ -122,13 +130,13 @@ function App() {
     }, [messageList]);
 
     useDidUpdate(() => {
-        const messageListLength = messageList?.filter(({chatId}) => chatId === 1).length;
+        const messageListLength = messageList?.filter(({chatId}) => chatId === chatUuId).length;
         //console.log(messageListLength);
 
-        const userName = messageList?.filter(({chatId}) => chatId === 1)[messageListLength - 1].message[0].author;
+        const userName = messageList?.filter(({chatId}) => chatId === chatUuId)[messageListLength - 1].message[0].author;
         //console.log(userName);
 
-        const userText = messageList?.filter(({chatId}) => chatId === 1)[messageListLength - 1].message[0].text;
+        const userText = messageList?.filter(({chatId}) => chatId === chatUuId)[messageListLength - 1].message[0].text;
         //console.log(userText);
 
         // const currentMessages = messageList?.filter(({chatId}) => chatId === 1);
@@ -179,6 +187,20 @@ function App() {
                     <Route path="/profile">
                         <Profile/>
                     </Route>
+                    <Route path="/home">
+                        <Home
+                            projectVersion={PROJECTVERSION}
+                            chatList={chats}
+                            messageList={messageList}
+                            nameBot={NAMEBOT}
+                            inputFocus={inputRef}
+                            onChange={inputHandler}
+                            onClick={(event) => clickHandler(event)}
+                            onKeyDown={(event) => keyHandler(event)}
+                            value={message}
+                            //chatUuId={chatUuId}
+                        />
+                    </Route>
                     <Route exact path="/">
                         <Home
                             projectVersion={PROJECTVERSION}
@@ -190,6 +212,7 @@ function App() {
                             onClick={(event) => clickHandler(event)}
                             onKeyDown={(event) => keyHandler(event)}
                             value={message}
+                            //chatUuId={chatUuId}
                         />
                     </Route>
                     <Route path="*">

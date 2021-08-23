@@ -9,7 +9,9 @@ export const Chat = ({chats}) => {
     const currentChat = chats?.find(({id}) => id === chatId);
 
     if (!currentChat) {
-        return <Redirect to="/chats"/>
+        //console.log('here');
+        //return <Redirect to="/chats"/>
+        return <Redirect to="/NoMatch"/>
     }
 
     return (

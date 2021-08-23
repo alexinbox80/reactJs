@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const Header = (props) => {
+export const Header = () => {
     const classes = useStyles();
 
     return (
