@@ -20,7 +20,7 @@ export const MessageTitle = (props) => {
 
     return (
         <h1 className={classes.title}>
-            {props.title + ' ' + props.ver}
+            {props.title}
         </h1>
     );
 };

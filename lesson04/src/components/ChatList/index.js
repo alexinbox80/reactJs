@@ -1,10 +1,11 @@
-import PropTypes from "prop-types";
-import {ChatItem} from "../ChatItem";
-import {List, ListItem} from "@material-ui/core";
-import styles from "./ChatList.module.sass";
-import {Link as RouterLink} from "react-router-dom";
-//import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
+import {Link as RouterLink} from "react-router-dom";
+
+import {ChatItem} from "../ChatItem";
+import styles from "./ChatList.module.sass";
+import {List, ListItem} from "@material-ui/core";
+
+import PropTypes from "prop-types";
 
 export const ChatList = ({chatList}) => {
     return (

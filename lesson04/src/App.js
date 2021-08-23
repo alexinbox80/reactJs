@@ -26,14 +26,12 @@ const uuid = () => faker.datatype.uuid();
 
 const chatUuId = uuid();
 
-
 const createChats = () => ({
     id: uuid(),
     title: faker.lorem.word(),
     description: faker.lorem.words(),
     content: faker.lorem.paragraphs(),
 });
-
 
 const PROJECTVERSION = 'v0.4';
 const RECEIVEDELAY = 1500;
@@ -130,13 +128,13 @@ function App() {
     }, [messageList]);
 
     useDidUpdate(() => {
-        const messageListLength = messageList?.filter(({chatId}) => chatId === chatUuId).length;
+        const messageListLength = messageList?.filter(({id}) => id === chatUuId).length;
         //console.log(messageListLength);
 
-        const userName = messageList?.filter(({chatId}) => chatId === chatUuId)[messageListLength - 1].message[0].author;
+        const userName = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].author;
         //console.log(userName);
 
-        const userText = messageList?.filter(({chatId}) => chatId === chatUuId)[messageListLength - 1].message[0].text;
+        const userText = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].text;
         //console.log(userText);
 
         // const currentMessages = messageList?.filter(({chatId}) => chatId === 1);
