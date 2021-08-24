@@ -1,4 +1,6 @@
 import {useEffect, useRef, useState} from "react";
+import {Route, Switch} from "react-router-dom";
+
 import faker from "faker";
 import styles from "./App.module.sass";
 
@@ -8,7 +10,6 @@ import {useDidUpdate} from "./hooks/useDidUpdate";
 
 import {Header} from "./components/Header";
 
-import {Route, Switch} from "react-router-dom";
 import {Home} from "./pages/Home";
 import {Profile} from "./pages/Profile";
 import {Chats} from "./pages/Chats";
@@ -38,8 +39,8 @@ const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
 function App() {
-    const [currentChat, setCurrentChat] = useState('');
 
+    const [currentChat, setCurrentChat] = useState('');
     const [chatList, setChats] = useState([]);
     const {message, setMessage} = useMessageForm();
     const [messageList, {append}] = useMessageList([]);
@@ -57,13 +58,8 @@ function App() {
 
     const clickHandler = () => {
         if (message.length) {
-
-            //append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
-
             append(currentChat, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
-
             setMessage('');
-
             inputRef.current?.focus();
         }
     };
@@ -71,8 +67,6 @@ function App() {
     const keyHandler = (event) => {
         if (event.key === 'Enter') {
             if (message.length) {
-                //append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
-
                 append(currentChat, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
                 setMessage('');
             }
@@ -99,46 +93,24 @@ function App() {
     };
 
     useEffect(() => {
+        document.title = 'Chat Bot ver: ' + PROJECTVERSION;
+    });
+
+    useEffect(() => {
 
         const newChat = Array.from({
             length: 2,
         }).map(createChats);
 
         newChat[0].id = chatUuId;
-
         setChats(newChat);
-
         setCurrentChat(chatUuId);
 
     }, []);
 
-    // useEffect(() => {
-    //     if (!chatList.length) {
-    //         chatAdd(chatItem(1, '1st room'));
-    //         chatAdd(chatItem(2, '2nd room'));
-    //         chatAdd(chatItem(3, '3th room'));
-    //         chatAdd(chatItem(4, '4th room'));
-    //         chatAdd(chatItem(5, '5th room'));
-    //     }
-    // }, [chatList]);
-
-
-    // useEffect(() => {
-    //     if (!messageList.length) {
-    //         messageDelay(() => {
-    //             botMessage('Привет! я бот Петрович');
-    //         });
-    //
-    //         messageDelay(() => {
-    //             botMessage('Как к Вам обращаться?');
-    //         });
-    //     }
-    // }, [messageList]);
-
-
     useEffect(() => {
         if (!messageList.length) {
-            chatList.forEach(({id, title}) => {
+            chatList.forEach(({id}) => {
 
                 messageDelay(() => {
                     botMessage(id, 'Привет! я бот Петрович');
@@ -152,57 +124,44 @@ function App() {
         }
     }, [chatList]);
 
-    useDidUpdate(() => {
+    const didHello = (currentId) => {
+        const currentMessageList = messageList?.filter(({id}) => id === currentId);
+        //console.log('currentMessageList ', currentMessageList);
 
-        console.log('messageList ', messageList);
+        const currentMessageListLength = messageList?.filter(({id}) => id === currentId).length
+        //console.log('currentMessageListLength ', currentMessageListLength);
 
-        //const messageListLength = messageList?.filter(({id}) => id === chatUuId).length;
-        const messageListLength = messageList?.filter(({id}) => id === currentChat).length;
-        //console.log(messageListLength);
+        if (currentMessageListLength === 0) {
 
-        //const userName = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].author;
-        const userName = messageList?.filter(({id}) => id === currentChat)[messageListLength - 1].message[0].author;
-        //console.log(userName);
-
-        //const userText = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].text;
-        const userText = messageList?.filter(({id}) => id === currentChat)[messageListLength - 1].message[0].text;
-        //console.log(userText);
-
-        // const currentMessages = messageList?.filter(({chatId}) => chatId === 1);
-        //
-        // //console.log('currentMessages ', currentMessages[0].messages);
-        //
-        // currentMessages.forEach((item) => {
-        //     console.log('length ', currentMessages.length);
-        //     console.log('author ', item.message[0].author);
-        //
-        //     const userName = item.message[0].author;
-        //
-        //     if (userName !== NAMEBOT) {
-        //         const userText = item.message[0].text;
-        //
-        //         console.log('name ', userName);
-        //         console.log('text ', userText);
-        //
-        //         //messageDelay(() => {
-        //         ///    botMessage('Здравствуйте, ' + userText + '!')
-        //         //});
-        //         //
-        //         // messageDelay(() => {
-        //         //     botMessage('Чем могу помочь?');
-        //         // });
-        //     }
-        // })
-
-        if (userName !== NAMEBOT) {
             messageDelay(() => {
-                botMessage(currentChat, 'Здравствуйте, ' + userText + '!')
+                botMessage(currentId, 'Привет! я бот Петрович');
             });
 
             messageDelay(() => {
-                botMessage(currentChat, 'Чем могу помочь?');
+                botMessage(currentId, 'Как к Вам обращаться?');
             });
+
         }
+    };
+
+    useDidUpdate(() => {
+        const messageListLength = messageList?.filter(({id}) => id === currentChat).length;
+
+        if (messageListLength) {
+            const userName = messageList?.filter(({id}) => id === currentChat)[messageListLength - 1].message[0].author;
+            const userText = messageList?.filter(({id}) => id === currentChat)[messageListLength - 1].message[0].text;
+
+            if (userName !== NAMEBOT) {
+                messageDelay(() => {
+                    botMessage(currentChat, 'Здравствуйте, ' + userText + '!')
+                });
+
+                messageDelay(() => {
+                    botMessage(currentChat, 'Чем могу помочь?');
+                });
+            }
+        }
+
     }, [messageList]);
 
     return (
@@ -219,10 +178,12 @@ function App() {
                     <Route path="/profile">
                         <Profile/>
                     </Route>
-                    <Route path="/home">
+                    <Route path='/home'>
                         <Home
                             projectVersion={PROJECTVERSION}
+                            didHello={didHello}
                             chatList={chatList}
+                            setCurrentChat={setCurrentChat}
                             messageList={messageList}
                             nameBot={NAMEBOT}
                             inputFocus={inputRef}
@@ -230,13 +191,14 @@ function App() {
                             onClick={(event) => clickHandler(event)}
                             onKeyDown={(event) => keyHandler(event)}
                             value={message}
-                            //chatUuId={chatUuId}
                         />
                     </Route>
                     <Route exact path="/">
                         <Home
                             projectVersion={PROJECTVERSION}
+                            didHello={didHello}
                             chatList={chatList}
+                            setCurrentChat={setCurrentChat}
                             messageList={messageList}
                             nameBot={NAMEBOT}
                             inputFocus={inputRef}
@@ -244,7 +206,6 @@ function App() {
                             onClick={(event) => clickHandler(event)}
                             onKeyDown={(event) => keyHandler(event)}
                             value={message}
-                            //chatUuId={chatUuId}
                         />
                     </Route>
                     <Route path="*">

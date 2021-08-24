@@ -8,12 +8,19 @@ import {MessageList} from "../../components/MessageList";
 export const Chat = (props) => {
     const {
         ver,
+        didHello,
         chats,
+        setCurrentChat,
         messageList,
         nameBot,
     } = props;
 
     const {chatId} = useParams();
+
+    if (chatId) {
+        setCurrentChat(chatId);
+        didHello(chatId);
+    }
 
     let messages = [];
 
@@ -50,6 +57,7 @@ export const Chat = (props) => {
 Chat.propTypes = {
     ver: PropTypes.string.isRequired,
     chats: PropTypes.array.isRequired,
+    setCurrentChat: PropTypes.func.isRequired,
     messageList: PropTypes.array.isRequired,
     nameBot: PropTypes.string.isRequired,
 };

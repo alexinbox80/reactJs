@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import faker from "faker";
 
 import PropTypes from "prop-types";
@@ -17,22 +17,15 @@ export const Chats = (props) => {
 
     const handleAddButton = (value) => {
 
-            const item = {
-                id: uuid(),
-                title: value.title,
-                description: value.description,
-                content: faker.lorem.paragraphs(),
+        const item = {
+            id: uuid(),
+            title: value.title,
+            description: value.description,
+            content: faker.lorem.paragraphs(),
+        };
 
-            };
-
-            props.chatList.push(item);
-
-//????????
-      //  props.setChats(props.chatList);
-
-     ///   console.log(props.chatList);
+        props.chatList.push(item);
     };
-
 
     const ChatForm = ({render, children}) => {
         const [formValue, setFormValue] = useState({});
@@ -75,7 +68,6 @@ export const Chats = (props) => {
             {
                 props.chatList.length ? props.chatList.map(({id, title, description}) =>
                     <ListItem key={id}>
-
                         <ListItemText primary={id}/>
                         <ListItemText primary={title}/>
                         <ListItemText primary={description}/>
@@ -122,47 +114,6 @@ export const Chats = (props) => {
                 }
             </ChatForm>
         </List>
-
-        /*<ChatForm>
-
-            {
-                (props) => {
-                    return <div>
-                        {
-                            JSON.stringify(props.formValue)
-                        }
-                        <br/>
-                        <input
-                            onChange={(event) => {
-                                const value = event.target.value;
-                                props.setFieldValue('title', value);
-                            }}
-                            value={props.formValue['title'] || ''}
-                            name="title"
-                            type="text"
-                        />
-                        <br/>
-                        <input
-                            onChange={(event) => {
-                                const value = event.target.value;
-                                props.setFieldValue('description', value);
-                            }}
-                            value={props.formValue['description'] || ''}
-                            name="description"
-                            type="text"
-                        />
-                        <br/>
-                        <button
-                            type="button"
-                            onClick={() => handleAddButton(props.formValue)}>
-                            AddChat
-                        </button>
-                    </div>
-                }
-            }
-        </ChatForm>
-*/
-
     );
 };
 

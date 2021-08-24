@@ -16,7 +16,7 @@ export const MessageTitle = (props) => {
 
     useEffect(() => {
         document.title = TITLE + props.ver;
-    }, []);
+    });
 
     return (
         <h1 className={classes.title}>

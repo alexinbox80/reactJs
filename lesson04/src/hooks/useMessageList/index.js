@@ -11,10 +11,6 @@ export const useMessageList = () => {
                     id,
                     message: {...message}
                 }
-                /* {
-                     chatId:id,
-                     message:{...messages},
-                 }*/
             ];
         });
     };

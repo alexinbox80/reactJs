@@ -32,15 +32,16 @@ import PropTypes from "prop-types";
 export const Home = (props) => {
     const {
         projectVersion,
+        didHello,
         chatList,
+        setCurrentChat,
         messageList,
         nameBot,
         inputFocus,
         onChange,
         onClick,
         onKeyDown,
-        value,
-//        chatUuId
+        value
     } = props;
 
     return (
@@ -53,7 +54,9 @@ export const Home = (props) => {
                     <Route path='/home/:chatId'>
                         <Chat
                             ver={projectVersion}
+                            didHello={didHello}
                             chats={chatList}
+                            setCurrentChat={setCurrentChat}
                             messageList={messageList}
                             nameBot={nameBot}
                         />
@@ -76,6 +79,7 @@ export const Home = (props) => {
 Home.propTypes = {
     projectVersion: PropTypes.string.isRequired,
     chatList: PropTypes.array.isRequired,
+    setCurrentChat: PropTypes.func.isRequired,
     messageList: PropTypes.array.isRequired,
     nameBot: PropTypes.string.isRequired,
     inputFocus: PropTypes.object.isRequired,

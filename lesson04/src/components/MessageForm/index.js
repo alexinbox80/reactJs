@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import {useParams} from "react-router-dom";
 
 import {Input, Button} from "@material-ui/core";
 import {useStyles} from "./styles";
@@ -8,9 +7,6 @@ import PropTypes from "prop-types";
 
 export const MessageForm = (props) => {
     const classes = useStyles();
-    const {chatId} = useParams();
-
-    //console.log('MessageForm chatId ', chatId);
 
     useEffect(() => {
         props.inputFocus.current?.focus();
