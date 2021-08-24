@@ -1,14 +1,8 @@
 import React from "react";
-//import {Link as RouterLink, Route} from "react-router-dom";
 import {Route} from "react-router-dom";
 
-//import {MessageTitle} from "../../components/MessageTitle";
-//import {MessageList} from "../../components/MessageList";
 import {MessageForm} from "../../components/MessageForm";
 import {ChatList} from "../../components/ChatList";
-
-//import ListItem from "@material-ui/core/ListItem";
-//import ListItemText from "@material-ui/core/ListItemText";
 
 import {Chat} from "../Chat";
 import styles from "./Home.module.sass";
@@ -57,22 +51,12 @@ export const Home = (props) => {
                 </div>
                 <div className={styles.messages}>
                     <Route path='/home/:chatId'>
-                        {/*<MessageTitle
-                            title={chatList[0]?.title}
-                            ver={projectVersion}/>*/}
                         <Chat
-                            //title={chatList[0]?.title}
                             ver={projectVersion}
                             chats={chatList}
                             messageList={messageList}
-                            //messageList={messages}
                             nameBot={nameBot}
                         />
-                        {/*<MessageList
-                            messageList={messageList}
-                            //messageList={messages}
-                            nameBot={nameBot}
-                        />*/}
                     </Route>
                 </div>
             </div>

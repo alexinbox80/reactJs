@@ -13,7 +13,6 @@ import {Home} from "./pages/Home";
 import {Profile} from "./pages/Profile";
 import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
-//import {useChatList} from "./hooks/useChatList";
 
 const userMessage = (id, time, text, author) => ({
     id,
@@ -39,9 +38,9 @@ const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
 function App() {
+    const [currentChat, setCurrentChat] = useState('');
 
-    //const [chatList, {chatAdd}] = useChatList([]);
-    const [chats, setChats] = useState([]);
+    const [chatList, setChats] = useState([]);
     const {message, setMessage} = useMessageForm();
     const [messageList, {append}] = useMessageList([]);
     const inputRef = useRef(null);
@@ -58,7 +57,11 @@ function App() {
 
     const clickHandler = () => {
         if (message.length) {
-            append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+
+            //append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+
+            append(currentChat, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+
             setMessage('');
 
             inputRef.current?.focus();
@@ -68,7 +71,9 @@ function App() {
     const keyHandler = (event) => {
         if (event.key === 'Enter') {
             if (message.length) {
-                append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+                //append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
+
+                append(currentChat, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEUSER));
                 setMessage('');
             }
         }
@@ -89,19 +94,21 @@ function App() {
         }
     };
 
-    const botMessage = (message) => {
-        append(chatUuId, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
+    const botMessage = (id, message) => {
+        append(id, userMessage(Date.now(), toHHMMSS(Date.now()), message, NAMEBOT));
     };
 
     useEffect(() => {
 
         const newChat = Array.from({
-            length: 5,
+            length: 2,
         }).map(createChats);
 
         newChat[0].id = chatUuId;
 
         setChats(newChat);
+
+        setCurrentChat(chatUuId);
 
     }, []);
 
@@ -115,26 +122,50 @@ function App() {
     //     }
     // }, [chatList]);
 
+
+    // useEffect(() => {
+    //     if (!messageList.length) {
+    //         messageDelay(() => {
+    //             botMessage('Привет! я бот Петрович');
+    //         });
+    //
+    //         messageDelay(() => {
+    //             botMessage('Как к Вам обращаться?');
+    //         });
+    //     }
+    // }, [messageList]);
+
+
     useEffect(() => {
         if (!messageList.length) {
-            messageDelay(() => {
-                botMessage('Привет! я бот Петрович');
-            });
+            chatList.forEach(({id, title}) => {
 
-            messageDelay(() => {
-                botMessage('Как к Вам обращаться?');
+                messageDelay(() => {
+                    botMessage(id, 'Привет! я бот Петрович');
+                });
+
+                messageDelay(() => {
+                    botMessage(id, 'Как к Вам обращаться?');
+                });
+
             });
         }
-    }, [messageList]);
+    }, [chatList]);
 
     useDidUpdate(() => {
-        const messageListLength = messageList?.filter(({id}) => id === chatUuId).length;
+
+        console.log('messageList ', messageList);
+
+        //const messageListLength = messageList?.filter(({id}) => id === chatUuId).length;
+        const messageListLength = messageList?.filter(({id}) => id === currentChat).length;
         //console.log(messageListLength);
 
-        const userName = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].author;
+        //const userName = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].author;
+        const userName = messageList?.filter(({id}) => id === currentChat)[messageListLength - 1].message[0].author;
         //console.log(userName);
 
-        const userText = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].text;
+        //const userText = messageList?.filter(({id}) => id === chatUuId)[messageListLength - 1].message[0].text;
+        const userText = messageList?.filter(({id}) => id === currentChat)[messageListLength - 1].message[0].text;
         //console.log(userText);
 
         // const currentMessages = messageList?.filter(({chatId}) => chatId === 1);
@@ -165,11 +196,11 @@ function App() {
 
         if (userName !== NAMEBOT) {
             messageDelay(() => {
-                botMessage('Здравствуйте, ' + userText + '!')
+                botMessage(currentChat, 'Здравствуйте, ' + userText + '!')
             });
 
             messageDelay(() => {
-                botMessage('Чем могу помочь?');
+                botMessage(currentChat, 'Чем могу помочь?');
             });
         }
     }, [messageList]);
@@ -180,7 +211,10 @@ function App() {
                 <Header/>
                 <Switch>
                     <Route path="/chats">
-                        <Chats/>
+                        <Chats
+                            chatList={chatList}
+                            setChats={setChats}
+                        />
                     </Route>
                     <Route path="/profile">
                         <Profile/>
@@ -188,7 +222,7 @@ function App() {
                     <Route path="/home">
                         <Home
                             projectVersion={PROJECTVERSION}
-                            chatList={chats}
+                            chatList={chatList}
                             messageList={messageList}
                             nameBot={NAMEBOT}
                             inputFocus={inputRef}
@@ -202,7 +236,7 @@ function App() {
                     <Route exact path="/">
                         <Home
                             projectVersion={PROJECTVERSION}
-                            chatList={chats}
+                            chatList={chatList}
                             messageList={messageList}
                             nameBot={NAMEBOT}
                             inputFocus={inputRef}
