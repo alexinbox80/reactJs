@@ -1,0 +1,14 @@
+.body {
+  display: flex;
+  height: calc(90vh - 52px);
+}
+
+.chats {
+  width: 20%;
+}
+
+.messages {
+  width: 80%;
+}
+
+/*# sourceMappingURL=Home.module.css.map */
