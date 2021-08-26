@@ -4,8 +4,6 @@ import {Route, Switch} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./store";
 
-import {TOGGLE_CHECKBOX, createActionToggleCheckbox} from "./store/profile/actions";
-
 import faker from "faker";
 import styles from "./App.module.sass";
 
@@ -19,16 +17,6 @@ import {Home} from "./pages/Home";
 import {Profile} from "./pages/Profile";
 import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
-
-
-store.dispatch({
-    type: TOGGLE_CHECKBOX,
-    payload: true,
-});
-
-console.log(createActionToggleCheckbox(false));
-
-store.dispatch(createActionToggleCheckbox(false));
 
 const userMessage = (id, time, text, author) => ({
     id,
@@ -140,7 +128,7 @@ function App() {
     }, [chatList]);
 
     const didHello = (currentId) => {
-        const currentMessageList = messageList?.filter(({id}) => id === currentId);
+        //const currentMessageList = messageList?.filter(({id}) => id === currentId);
         //console.log('currentMessageList ', currentMessageList);
 
         const currentMessageListLength = messageList?.filter(({id}) => id === currentId).length
