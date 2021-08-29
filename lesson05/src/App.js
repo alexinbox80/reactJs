@@ -1,6 +1,9 @@
 import {useEffect, useRef, useState} from "react";
 import {Route, Switch} from "react-router-dom";
 
+import {Provider} from "react-redux";
+import {store} from "./store";
+
 import faker from "faker";
 import styles from "./App.module.sass";
 
@@ -125,7 +128,7 @@ function App() {
     }, [chatList]);
 
     const didHello = (currentId) => {
-        const currentMessageList = messageList?.filter(({id}) => id === currentId);
+        //const currentMessageList = messageList?.filter(({id}) => id === currentId);
         //console.log('currentMessageList ', currentMessageList);
 
         const currentMessageListLength = messageList?.filter(({id}) => id === currentId).length
@@ -165,55 +168,57 @@ function App() {
     }, [messageList]);
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.content}>
-                <Header/>
-                <Switch>
-                    <Route path="/chats">
-                        <Chats
-                            chatList={chatList}
-                            setChats={setChats}
-                        />
-                    </Route>
-                    <Route path="/profile">
-                        <Profile/>
-                    </Route>
-                    <Route path='/home'>
-                        <Home
-                            projectVersion={PROJECTVERSION}
-                            didHello={didHello}
-                            chatList={chatList}
-                            setCurrentChat={setCurrentChat}
-                            messageList={messageList}
-                            nameBot={NAMEBOT}
-                            inputFocus={inputRef}
-                            onChange={inputHandler}
-                            onClick={(event) => clickHandler(event)}
-                            onKeyDown={(event) => keyHandler(event)}
-                            value={message}
-                        />
-                    </Route>
-                    <Route exact path="/">
-                        <Home
-                            projectVersion={PROJECTVERSION}
-                            didHello={didHello}
-                            chatList={chatList}
-                            setCurrentChat={setCurrentChat}
-                            messageList={messageList}
-                            nameBot={NAMEBOT}
-                            inputFocus={inputRef}
-                            onChange={inputHandler}
-                            onClick={(event) => clickHandler(event)}
-                            onKeyDown={(event) => keyHandler(event)}
-                            value={message}
-                        />
-                    </Route>
-                    <Route path="*">
-                        <NoMatch/>
-                    </Route>
-                </Switch>
+        <Provider store={store}>
+            <div className={styles.wrapper}>
+                <div className={styles.content}>
+                    <Header/>
+                    <Switch>
+                        <Route path="/chats">
+                            <Chats
+                                chatList={chatList}
+                                setChats={setChats}
+                            />
+                        </Route>
+                        <Route path="/profile">
+                            <Profile/>
+                        </Route>
+                        <Route path='/home'>
+                            <Home
+                                projectVersion={PROJECTVERSION}
+                                didHello={didHello}
+                                chatList={chatList}
+                                setCurrentChat={setCurrentChat}
+                                messageList={messageList}
+                                nameBot={NAMEBOT}
+                                inputFocus={inputRef}
+                                onChange={inputHandler}
+                                onClick={(event) => clickHandler(event)}
+                                onKeyDown={(event) => keyHandler(event)}
+                                value={message}
+                            />
+                        </Route>
+                        <Route exact path="/">
+                            <Home
+                                projectVersion={PROJECTVERSION}
+                                didHello={didHello}
+                                chatList={chatList}
+                                setCurrentChat={setCurrentChat}
+                                messageList={messageList}
+                                nameBot={NAMEBOT}
+                                inputFocus={inputRef}
+                                onChange={inputHandler}
+                                onClick={(event) => clickHandler(event)}
+                                onKeyDown={(event) => keyHandler(event)}
+                                value={message}
+                            />
+                        </Route>
+                        <Route path="*">
+                            <NoMatch/>
+                        </Route>
+                    </Switch>
+                </div>
             </div>
-        </div>
+        </Provider>
     );
 }
 
