@@ -3,11 +3,14 @@ import {useState} from 'react';
 export const useMessageList = () => {
     const [messageList, setMessageList] = useState([]);
 
-    const append = (...messages) => {
+    const append = (id, ...message) => {
         setMessageList((messageList) => {
             return [
                 ...messageList,
-                ...messages
+                {
+                    id,
+                    message: {...message}
+                }
             ];
         });
     };

@@ -1,7 +1,9 @@
 import {useEffect} from "react";
-import PropTypes from "prop-types";
+
 import {Input, Button} from "@material-ui/core";
 import {useStyles} from "./styles";
+
+import PropTypes from "prop-types";
 
 export const MessageForm = (props) => {
     const classes = useStyles();
