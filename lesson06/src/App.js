@@ -170,8 +170,8 @@ function App() {
                 <Switch>
                     <Route path="/chats">
                         <Chats
-                            chatList={chatList}
-                            setChats={setChats}
+                           /* chatList={chatList}
+                            setChats={setChats}*/
                         />
                     </Route>
                     <Route path="/profile">
