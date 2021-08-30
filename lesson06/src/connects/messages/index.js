@@ -1,20 +1,20 @@
 import {connect} from "react-redux";
 import {
     messagesSelectors,
-    createActionCreateMessage,
+    createActionAddMessage,
     createActionRemoveMessage,
 } from "../../store/messages";
 
-const mapStateToProps = (state) => ({
-    messages: messagesSelectors.getMessages(state),
+const mapStateToProps = (state, {chatId}) => ({
+    messages: messagesSelectors.getMessage(state, chatId),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-   /* createMessage(messages) {
-        return dispatch(createActionCreateMessage(messages));
+   /* addMessage(messages) {
+        return dispatch(createActionAddMessage(messages));
     },*/
 
-    createMessage: (message) => {dispatch(createActionCreateMessage(message))},
+    addMessage: (message) => {dispatch(createActionAddMessage(message))},
     removeMessage(id) {
         return dispatch(createActionRemoveMessage(id));
     }

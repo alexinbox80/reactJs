@@ -18,7 +18,6 @@ export const ChatsRender = ({chats, addChats, removeChats}) => {
     };
 
     const handleAddButton = (value) => {
-
         const item = {
             id: uuid(),
             title: value.title,
@@ -26,7 +25,9 @@ export const ChatsRender = ({chats, addChats, removeChats}) => {
             content: faker.lorem.paragraphs(),
         };
 
-        addChats(item);
+        if (value.title) {
+            addChats(item);
+        }
     };
 
     const ChatForm = ({render, children}) => {
@@ -125,7 +126,7 @@ ChatsRender.propTypes = {
         title: propTypes.string,
         description: propTypes.string,
         content: propTypes.string,
-        }))
+    }))
 };
 
-export const Chats  = chatsConnect(ChatsRender);
+export const Chats = chatsConnect(ChatsRender);

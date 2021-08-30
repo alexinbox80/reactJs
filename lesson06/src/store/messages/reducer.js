@@ -1,4 +1,4 @@
-import {CREATE_MESSAGE, REMOVE_MESSAGE} from "./actions";
+import {ADD_MESSAGE, REMOVE_MESSAGE} from "./actions";
 
 const initialState = {
     messages: {},
@@ -11,26 +11,27 @@ const initialState = {
  * @param {string} action.type
  * @param {string} action.payload
  * @param {string} action.payload.id
- * @param {string} action.payload.chatsId
+ * @param {string} action.payload.chatId
  * @param {string} action.payload.content
  * */
 
 export const messagesReducer = (state = initialState, action) => {
     switch (action.type) {
-        case CREATE_MESSAGE: {
-            const {chatsId} = action.payload;
+        case ADD_MESSAGE: {
+            const {chatId} = action.payload;
 
-            if (state.messages.hasOwnProperty(chatsId)) {
-                state.messages[chatsId] = [
-                    ...state.messages[chatsId],
+            if (state.messages.hasOwnProperty(chatId)) {
+                state.messages[chatId] = [
+                    ...state.messages[chatId],
                     action.payload,
                 ];
             } else {
-                state.messages[chatsId] = [action.payload];
+                state.messages[chatId] = [action.payload];
             }
 
             return {
                 messages: {
+                    //?????
                     ...state.messages,
                 }
             }

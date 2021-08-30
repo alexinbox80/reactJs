@@ -1,19 +1,56 @@
 import {useEffect} from "react";
+import {useParams} from "react-router-dom";
 
-import {Input, Button} from "@material-ui/core";
+import {useSimpleForm} from "../../hooks/useSimpleForm";
+import {messagesConnect} from "../../connects/messages";
+
+import {TextField, Input, Button} from "@material-ui/core";
+
+import faker from "faker";
 import {useStyles} from "./styles";
-
 import PropTypes from "prop-types";
 
-export const MessageForm = (props) => {
+const uuid = () => faker.datatype.uuid();
+
+export const MessageFormRender = (props) => {
     const classes = useStyles();
+    const {chatId} = useParams();
 
     useEffect(() => {
         props.inputFocus.current?.focus();
-    }, [ props.inputFocus]);
+    }, [props.inputFocus]);
+
+    const {setFieldValue, getFieldValue, resetForm} = useSimpleForm({});
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        const messagesItem = {
+            chatId,
+            id: uuid(),
+            content: getFieldValue('message')
+        }
+
+        props.addMessage(messagesItem);
+
+        console.log('messages ', props.messages);
+
+        resetForm();
+    }
 
     return (
-        <div className={classes.footer}>
+        <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
+            <TextField
+                name="message"
+                inputRef={props.inputFocus}
+                value={getFieldValue('message')}
+                onChange={(event) => {
+                    setFieldValue('message', event.target.value);
+                }}
+                label="Content"/>
+            <Button type="submit">Save</Button>
+        </form>
+        /*<div className={classes.footer}>
             <Input
                 className={classes.input}
                 id="input__message"
@@ -34,13 +71,15 @@ export const MessageForm = (props) => {
                 Send Message
             </Button>
         </div>
-    );
+*/);
 };
 
-MessageForm.propTypes = {
+MessageFormRender.propTypes = {
     inputFocus: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     onKeyDown: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
 };
+
+export const MessageForm = messagesConnect(MessageFormRender);

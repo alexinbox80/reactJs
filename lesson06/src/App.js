@@ -38,7 +38,6 @@ const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
 function App() {
-
     const [currentChat, setCurrentChat] = useState('');
     const [chatList, setChats] = useState([]);
     const {message, setMessage} = useMessageForm();
@@ -181,7 +180,7 @@ function App() {
                         <Home
                             projectVersion={PROJECTVERSION}
                             didHello={didHello}
-                            chatList={chatList}
+                            // chatList={chatList}
                             setCurrentChat={setCurrentChat}
                             messageList={messageList}
                             nameBot={NAMEBOT}
@@ -196,7 +195,7 @@ function App() {
                         <Home
                             projectVersion={PROJECTVERSION}
                             didHello={didHello}
-                            chatList={chatList}
+                            // chatList={chatList}
                             setCurrentChat={setCurrentChat}
                             messageList={messageList}
                             nameBot={NAMEBOT}

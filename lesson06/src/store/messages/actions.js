@@ -1,18 +1,17 @@
 
-export const CREATE_MESSAGE = 'CREATE_MESSAGE';
-
-export const REMOVE_MESSAGE = 'Remove_MESSAGE';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 
 /**
- * @param {object} message
- * @param {string} message.id
- * @param {string} message.content
- * @param {string} message.chatsId
+ * @param {object} messages
+ * @param {string} messages.id
+ * @param {string} messages.content
+ * @param {string} messages.chatsId
  * */
 
-export const  createActionCreateMessage = (message) => ({
-    type: CREATE_MESSAGE,
-    payload: message
+export const  createActionAddMessage = (messages) => ({
+    type: ADD_MESSAGE,
+    payload: messages
 });
 
 export const  createActionRemoveMessage = (id) => ({

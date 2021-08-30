@@ -1,16 +1,23 @@
 import React from "react";
 import {useParams, Redirect} from "react-router-dom";
 
+import {messagesConnect} from "../../connects/messages";
+
 import PropTypes from "prop-types";
 import {MessageTitle} from "../../components/MessageTitle";
 import {MessageList} from "../../components/MessageList";
+//import {chatsConnect} from "../../connects/chats";
+//import {ChatsRender} from "../Chats";
 
-export const Chat = (props) => {
+export const ChatRender = (props) => {
+    console.log('Chat ', props);
+
     const {
         ver,
         didHello,
         chats,
         setCurrentChat,
+        //messages,
         messageList,
         nameBot,
     } = props;
@@ -54,10 +61,12 @@ export const Chat = (props) => {
     );
 };
 
-Chat.propTypes = {
+ChatRender.propTypes = {
     ver: PropTypes.string.isRequired,
     chats: PropTypes.array.isRequired,
     setCurrentChat: PropTypes.func.isRequired,
     messageList: PropTypes.array.isRequired,
     nameBot: PropTypes.string.isRequired,
 };
+
+export const Chat = messagesConnect(ChatRender);
