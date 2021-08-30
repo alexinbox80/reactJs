@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import {
     messagesSelectors,
     createActionAddMessage,
-    createActionRemoveMessage,
+    createActionRemoveMessage
 } from "../../store/messages";
 
 const mapStateToProps = (state, {chatId}) => ({
@@ -10,11 +10,9 @@ const mapStateToProps = (state, {chatId}) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-   /* addMessage(messages) {
-        return dispatch(createActionAddMessage(messages));
-    },*/
-
-    addMessage: (message) => {dispatch(createActionAddMessage(message))},
+    addMessage(message) {
+        return dispatch(createActionAddMessage(message));
+    },
     removeMessage(id) {
         return dispatch(createActionRemoveMessage(id));
     }

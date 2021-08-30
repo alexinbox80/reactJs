@@ -167,16 +167,10 @@ function App() {
             <div className={styles.content}>
                 <Header/>
                 <Switch>
-                    <Route path="/chats">
-                        <Chats
-                           /* chatList={chatList}
-                            setChats={setChats}*/
-                        />
-                    </Route>
-                    <Route path="/profile">
-                        <Profile/>
-                    </Route>
-                    <Route path='/home'>
+                    <Route path="/chats" component={Chats}/>
+                    <Route path="/profile" component={Profile}/>
+                    <Route path="/home/:chatId">
+                        {/*<Route path='/home'>*/}
                         <Home
                             projectVersion={PROJECTVERSION}
                             didHello={didHello}

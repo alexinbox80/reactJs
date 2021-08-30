@@ -12,6 +12,12 @@ import PropTypes from "prop-types";
 
 const uuid = () => faker.datatype.uuid();
 
+const toHHMMSS = (mseconds) => (
+    new Date(mseconds)
+        .toTimeString()
+        .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
+);
+
 export const MessageFormRender = (props) => {
     const classes = useStyles();
     const {chatId} = useParams();
@@ -25,30 +31,43 @@ export const MessageFormRender = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        //id, time, text, author
         const messagesItem = {
             chatId,
             id: uuid(),
-            content: getFieldValue('message')
-        }
+            time: toHHMMSS(Date.now()),
+            text: getFieldValue('message'),
+            author: 'user',
+        };
 
         props.addMessage(messagesItem);
 
-        console.log('messages ', props.messages);
+        //console.log('messages ', props.messages);
 
         resetForm();
-    }
+    };
 
     return (
         <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
-            <TextField
+            <Input
+                id="input__message"
+                className={classes.input}
+                placeholder="Input message and press Enter"
                 name="message"
+                type="text"
+                disableUnderline={true}
+                autoFocus={true}
                 inputRef={props.inputFocus}
                 value={getFieldValue('message')}
                 onChange={(event) => {
                     setFieldValue('message', event.target.value);
                 }}
                 label="Content"/>
-            <Button type="submit">Save</Button>
+            <Button
+                className={classes.button}
+                type="submit">
+                Send Message
+            </Button>
         </form>
         /*<div className={classes.footer}>
             <Input

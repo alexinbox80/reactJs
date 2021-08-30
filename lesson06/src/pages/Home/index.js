@@ -1,5 +1,5 @@
 import React from "react";
-import {Route} from "react-router-dom";
+import {Route, useParams} from "react-router-dom";
 
 import {chatsConnect} from "../../connects/chats";
 
@@ -12,6 +12,8 @@ import styles from "./Home.module.sass";
 import propTypes from "prop-types";
 
 export const HomeRender = (props) => {
+    const {chatId} = useParams();
+
     const {
         projectVersion,
         didHello,
@@ -35,9 +37,9 @@ export const HomeRender = (props) => {
                 <div className={styles.messages}>
                     <Route path='/home/:chatId'>
                         <Chat
+                            chatId={chatId}
                             ver={projectVersion}
                             didHello={didHello}
-                            // chats={chatList}
                             chats={chats}
                             setCurrentChat={setCurrentChat}
                             messageList={messageList}
@@ -48,6 +50,7 @@ export const HomeRender = (props) => {
             </div>
             <Route path='/home/:chatId'>
                 <MessageForm
+                    chatId={chatId}
                     inputFocus={inputFocus}
                     onChange={onChange}
                     onClick={onClick}
