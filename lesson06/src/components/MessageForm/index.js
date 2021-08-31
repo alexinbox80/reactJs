@@ -1,14 +1,13 @@
-import {useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {useEffect, useRef} from "react";
 
 import {useSimpleForm} from "../../hooks/useSimpleForm";
 import {messagesConnect} from "../../connects/messages";
 
-import {TextField, Input, Button} from "@material-ui/core";
+import {Input, Button} from "@material-ui/core";
 
 import faker from "faker";
 import {useStyles} from "./styles";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 
 const uuid = () => faker.datatype.uuid();
 
@@ -20,11 +19,11 @@ const toHHMMSS = (mseconds) => (
 
 export const MessageFormRender = (props) => {
     const classes = useStyles();
-    const {chatId} = useParams();
+    const inputFocus = useRef(null);
 
     useEffect(() => {
-        props.inputFocus.current?.focus();
-    }, [props.inputFocus]);
+        inputFocus.current?.focus();
+    }, [inputFocus]);
 
     const {setFieldValue, getFieldValue, resetForm} = useSimpleForm({});
 
@@ -33,16 +32,16 @@ export const MessageFormRender = (props) => {
 
         //id, time, text, author
         const messagesItem = {
-            chatId,
+            chatId: props.chatId,
             id: uuid(),
             time: toHHMMSS(Date.now()),
             text: getFieldValue('message'),
-            author: 'user',
+            author: props.nameUser,
         };
 
         props.addMessage(messagesItem);
 
-        //console.log('messages ', props.messages);
+        inputFocus.current?.focus();
 
         resetForm();
     };
@@ -57,7 +56,7 @@ export const MessageFormRender = (props) => {
                 type="text"
                 disableUnderline={true}
                 autoFocus={true}
-                inputRef={props.inputFocus}
+                inputRef={inputFocus}
                 value={getFieldValue('message')}
                 onChange={(event) => {
                     setFieldValue('message', event.target.value);
@@ -69,36 +68,12 @@ export const MessageFormRender = (props) => {
                 Send Message
             </Button>
         </form>
-        /*<div className={classes.footer}>
-            <Input
-                className={classes.input}
-                id="input__message"
-                placeholder="Input message and press Enter"
-                type="text"
-                autoFocus={true}
-                inputRef={props.inputFocus}
-                disableUnderline={true}
-                onChange={props.onChange}
-                onKeyDown={props.onKeyDown}
-                value={props.value}
-            />
-            <Button
-                className={classes.button}
-                id="input__button"
-                variant="outlined"
-                onClick={props.onClick}>
-                Send Message
-            </Button>
-        </div>
-*/);
+    );
 };
 
 MessageFormRender.propTypes = {
-    inputFocus: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onKeyDown: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
+    chatId: propTypes.string.isRequired,
+    nameUser: propTypes.string.isRequired,
 };
 
 export const MessageForm = messagesConnect(MessageFormRender);
