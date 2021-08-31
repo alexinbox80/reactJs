@@ -14,7 +14,7 @@ import {Async} from "./pages/Async";
 import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
 
-const PROJECTVERSION = 'v0.6';
+const PROJECTVERSION = 'v0.7';
 const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
