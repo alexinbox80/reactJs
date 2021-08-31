@@ -1,4 +1,9 @@
 import {useEffect} from "react";
+//import {useDispatch, useSelector} from "react-redux";
+import {createActionRemoveMessages} from "./store/messages";
+
+import {store} from "./store";
+
 import {Route, Switch} from "react-router-dom";
 import styles from "./App.module.sass";
 
@@ -18,12 +23,18 @@ function App() {
         document.title = 'Chat Bot ver: ' + PROJECTVERSION;
     });
 
+    const RemoveMessages = (id) => {
+        store.dispatch(createActionRemoveMessages(id));
+    };
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
                 <Header/>
                 <Switch>
-                    <Route path="/chats" component={Chats}/>
+                    <Route path="/chats">
+                        <Chats removeMessages={RemoveMessages}/>
+                    </Route>
                     <Route path="/profile" component={Profile}/>
                     <Route path="/home/:chatId">
                         <Home

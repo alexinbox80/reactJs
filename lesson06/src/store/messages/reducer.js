@@ -1,4 +1,4 @@
-import {ADD_MESSAGE, REMOVE_MESSAGE} from "./actions";
+import {ADD_MESSAGE, REMOVE_MESSAGE, REMOVE_MESSAGES} from "./actions";
 
 const initialState = {
     messages: {},
@@ -40,6 +40,28 @@ export const messagesReducer = (state = initialState, action) => {
             let messages = [...state.messages];
 
             messages = messages.filter((item) => item.id !== action.payload.id);
+
+            return {
+                messages
+            }
+        }
+
+        case REMOVE_MESSAGES: {
+            const chatId = action.payload.id
+            let messages = {};
+            const messagesOld = {...state.messages};
+
+            if (state.messages.hasOwnProperty(chatId)) {
+               // delete messages[action.payload.id];
+                for (let key in messagesOld) {
+                    if (key !== chatId) {
+                        messages = {
+                            ...messages,
+                            [key]:messagesOld[key]
+                        }
+                    }
+                }
+            }
 
             return {
                 messages

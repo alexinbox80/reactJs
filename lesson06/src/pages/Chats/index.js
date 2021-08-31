@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-
 import {chatsConnect} from "../../connects/chats";
 
 import faker from "faker";
@@ -11,10 +10,11 @@ import styles from "./Chats.module.sass";
 
 const uuid = () => faker.datatype.uuid();
 
-export const ChatsRender = ({chats, addChats, removeChats}) => {
+export const ChatsRender = ({chats, addChats, removeChats, removeMessages}) => {
 
     const handleRemove = (id) => {
         removeChats(id);
+        removeMessages(id);
     };
 
     const handleAddButton = (value) => {
