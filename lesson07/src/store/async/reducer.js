@@ -1,39 +1,39 @@
-import {REMOVE_MESSAGE, ADD_MESSAGE_ERROR, ADD_MESSAGE_LOADING, ADD_MESSAGE_SUCCESS} from "./actions";
+import {REMOVE_AMESSAGE, ADD_AMESSAGE_ERROR, ADD_AMESSAGE_LOADING, ADD_AMESSAGE_SUCCESS} from "./actions";
 
 export const initialState = {
-    messages: [],
+    amessages: [],
     isLoading: false,
     error: null,
 };
 
-export const messageReducer = (state = initialState, action) => {
+export const asyncReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_MESSAGE_LOADING: {
+        case ADD_AMESSAGE_LOADING: {
             return {
                 ...state,
                 isLoading: action.payload,
             }
         }
-        case ADD_MESSAGE_ERROR: {
+        case ADD_AMESSAGE_ERROR: {
             return {
                 ...state,
                 error: action.payload,
             }
         }
-        case ADD_MESSAGE_SUCCESS: {
+        case ADD_AMESSAGE_SUCCESS: {
             return {
                 ...state,
-                messages: [
-                    ...state.messages,
+                amessages: [
+                    ...state.amessages,
                     action.payload,
                 ]
             }
         }
-        case REMOVE_MESSAGE: {
+        case REMOVE_AMESSAGE: {
             return {
                 ...state,
-                messages: [
-                    ...state.messages.filter((message) => message.id !== action.payload),
+                amessages: [
+                    ...state.amessages.filter((message) => message.id !== action.payload),
                 ]
             }
         }

@@ -1,16 +1,15 @@
 import React, {useState} from "react";
 import {Provider, useDispatch, useSelector} from "react-redux";
-//import {store} from "../../astore";
 
 import styles from "./Async.module.sass";
+
 import {
     createAddMessageRequest,
     createRemoveMessageRequest,
     getMessagesLoadingStatusSelector,
     getMessagesSelector
-} from "../../astore/message";
+} from "../../store/async";
 
-//import {SendMessageForm} from './components/SendMessageForm';
 const SendMessageForm = ({value, isLoading, onSubmit, onChange}) => {
 
     return (<div>
@@ -23,8 +22,6 @@ const SendMessageForm = ({value, isLoading, onSubmit, onChange}) => {
         }
     </div>)
 };
-
-//import {SendMessageFormHOC} from './containers/SendMessageFormHOC';
 
 const SendMessageFormHOC = (Component) => {
 
@@ -65,7 +62,9 @@ export const Async = () => {
     const isLoading = useSelector(getMessagesLoadingStatusSelector);
     const dispatch = useDispatch();
 
-    const onRemove = (id) => () => dispatch(createRemoveMessageRequest(id))
+    console.log('messages ', messages);
+
+    const onRemove = (id) => () => dispatch(createRemoveMessageRequest(id));
     const onAddMessage = (message) => {
         const fn = createAddMessageRequest({message, id: Date.now()});
         dispatch(fn);

@@ -4,7 +4,7 @@ const delay = () => new Promise((resolve) => {
     }), 1000);
 });
 
-export const messagesApi = {
+export const amessagesApi = {
     addMessage: async () => {
         try {
             const result = await delay();
