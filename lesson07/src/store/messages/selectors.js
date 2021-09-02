@@ -5,3 +5,5 @@ export const messagesSelectors = {
     getMessages,
     getMessage
 };
+
+export const getMessagesLoadingStatusSelector = (state) => state.messages.isLoading;

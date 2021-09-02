@@ -24,6 +24,7 @@ function App() {
     });
 
     const RemoveMessages = (id) => {
+        console.log(id);
         store.dispatch(createActionRemoveMessages(id));
     };
 

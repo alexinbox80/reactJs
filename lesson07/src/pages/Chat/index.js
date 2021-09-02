@@ -34,11 +34,19 @@ export const ChatRender = (props) => {
     const {
         chats,
         messages,
+        isLoading,
+        removeMessage,
         addMessage,
         ver,
         chatId,
         nameBot,
     } = props;
+
+    const handleRemoveMessage = (messageId) => {
+        //console.log('handler chatId ', chatId);
+        //console.log('handler messageId ', messageId);
+        removeMessage(chatId, messageId);
+    };
 
     const currentChat = chats?.find(({id}) => id === chatId);
 
@@ -91,7 +99,13 @@ export const ChatRender = (props) => {
             <MessageList
                 messageList={messages}
                 nameBot={nameBot}
+                removeMessage={handleRemoveMessage}
             />
+            {
+                isLoading && <div>
+                    loading...
+                </div>
+            }
         </>
     );
 };
@@ -99,7 +113,12 @@ export const ChatRender = (props) => {
 ChatRender.propTypes = {
     ver: propTypes.string.isRequired,
     chats: propTypes.array.isRequired,
+    chatId: propTypes.string.isRequired,
     nameBot: propTypes.string.isRequired,
+    isLoading: propTypes.bool,
+    removeMessage: propTypes.func.isRequired,
+    messages: propTypes.array,
+    addMessage: propTypes.func.isRequired,
 };
 
 export const Chat = messagesConnect(ChatRender);

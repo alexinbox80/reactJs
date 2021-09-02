@@ -1,8 +1,3 @@
-export const getMessagesSelector = (state) => {
+export const getMessagesSelector = (state) => state.async?.amessages || [];
 
-    console.log('getMessagesSelector ', state.amessages.amessages);
-
-    return state.amessages?.messages || [];
-};
-
-export const getMessagesLoadingStatusSelector = (state) => state.amessages?.isLoading;
+export const getMessagesLoadingStatusSelector = (state) => state.async?.isLoading;

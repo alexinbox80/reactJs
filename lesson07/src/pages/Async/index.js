@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Provider, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 import styles from "./Async.module.sass";
 
@@ -62,8 +62,6 @@ export const Async = () => {
     const isLoading = useSelector(getMessagesLoadingStatusSelector);
     const dispatch = useDispatch();
 
-    console.log('messages ', messages);
-
     const onRemove = (id) => () => dispatch(createRemoveMessageRequest(id));
     const onAddMessage = (message) => {
         const fn = createAddMessageRequest({message, id: Date.now()});
@@ -71,11 +69,9 @@ export const Async = () => {
     };
 
     return (
-
-            <div className={styles.content}>
-                <SendMessageFormWithHOC isLoading={isLoading} onSend={onAddMessage}/>
-                <MessageList messages={messages} onRemove={onRemove}/>
-            </div>
-
+        <div className={styles.content}>
+            <SendMessageFormWithHOC isLoading={isLoading} onSend={onAddMessage}/>
+            <MessageList messages={messages} onRemove={onRemove}/>
+        </div>
     );
 };

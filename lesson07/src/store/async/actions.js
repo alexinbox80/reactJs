@@ -1,6 +1,6 @@
-import {amessagesApi} from "../../api/amessagesApi";
+import {amessagesApi} from "../../api/v1/amessagesApi";
 
-export const ADD_AMESSAGE = 'ADD_AMESSAGE';
+//export const ADD_AMESSAGE = 'ADD_AMESSAGE';
 
 export const ADD_AMESSAGE_LOADING = 'ADD_AMESSAGE_LOADING';
 export const ADD_AMESSAGE_SUCCESS = 'ADD_AMESSAGE_SUCCESS';
