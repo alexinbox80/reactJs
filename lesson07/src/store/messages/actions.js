@@ -1,4 +1,15 @@
 import {messageApi} from "../../api/v1/messageApi";
+import faker from "faker";
+
+const BOT = 'bot';
+
+const uuid = () => faker.datatype.uuid();
+
+const toHHMMSS = (mseconds) => (
+    new Date(mseconds)
+        .toTimeString()
+        .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
+);
 
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
@@ -34,6 +45,50 @@ export const createActionRemoveMessages = (id) => ({
     payload: {id}
 });
 
+export const createActionAddMessageRequest = (message) => {
+    return async (dispatch) => {
+
+        dispatch(createActionAddMessageLoading(true));
+
+        const [error, result] = await messageApi.addMessage();
+
+        if (error) {
+            dispatch(createActionAddMessageError(error));
+        }
+
+        if (result) {
+            dispatch(createActionAddMessageSuccess(message));
+
+            if (message.author !== BOT) {
+                const userText = message.text;
+
+                let messagesItem1 = {
+                    chatId: message.chatId,
+                    id: uuid(),
+                    time: toHHMMSS(Date.now()),
+                    text: 'async Здравствуйте, ' + userText + '!',
+                    author: BOT,
+                };
+
+                let messagesItem2 = {
+                    chatId: message.chatId,
+                    id: uuid(),
+                    time: toHHMMSS(Date.now()),
+                    text: 'async Чем могу помочь?',
+                    author: BOT,
+                };
+
+                setTimeout(() => {
+                    dispatch(createActionAddMessageSuccess(messagesItem1));
+                    dispatch(createActionAddMessageSuccess(messagesItem2));
+                }, 2000);
+            }
+        }
+        dispatch(createActionAddMessageLoading(false));
+    };
+};
+
+/*
 export const createActionAddMessageRequest = (message) => async (dispatch) => {
 
     dispatch(createActionAddMessageLoading(true));
@@ -50,6 +105,7 @@ export const createActionAddMessageRequest = (message) => async (dispatch) => {
 
     dispatch(createActionAddMessageLoading(false));
 };
+*/
 
 export const createActionRemoveMessageRequest = (chatId, messageId) => async (dispatch) => {
 
@@ -61,7 +117,7 @@ export const createActionRemoveMessageRequest = (chatId, messageId) => async (di
         dispatch(createActionAddMessageError(error));
     }
 
-    if(result) {
+    if (result) {
         dispatch(createActionRemoveMessage(chatId, messageId));
     }
 
@@ -78,7 +134,7 @@ export const createActionRemoveMessagesRequest = (messageId) => async (dispatch)
         dispatch(createActionAddMessageError(error));
     }
 
-    if(result) {
+    if (result) {
         dispatch(createActionRemoveMessages(messageId));
     }
 

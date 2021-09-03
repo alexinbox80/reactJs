@@ -6,7 +6,7 @@ import propTypes from "prop-types";
 import {MessageTitle} from "../../components/MessageTitle";
 import {MessageList} from "../../components/MessageList";
 
-import {useDidUpdate} from "../../hooks/useDidUpdate";
+//import {useDidUpdate} from "../../hooks/useDidUpdate";
 
 const uuid = () => faker.datatype.uuid();
 
@@ -43,8 +43,6 @@ export const ChatRender = (props) => {
     } = props;
 
     const handleRemoveMessage = (messageId) => {
-        //console.log('handler chatId ', chatId);
-        //console.log('handler messageId ', messageId);
         removeMessage(chatId, messageId);
     };
 
@@ -59,7 +57,7 @@ export const ChatRender = (props) => {
         DidHello(chatId);
     }
 
-    useDidUpdate(() => {
+    /*useDidUpdate(() => {
         const messageListLength = messages?.length;
 
         if (messageListLength) {
@@ -89,7 +87,7 @@ export const ChatRender = (props) => {
             }
         }
     }, [messages]);
-
+*/
     return (
         <>
             <MessageTitle
