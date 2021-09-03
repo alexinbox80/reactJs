@@ -7,8 +7,6 @@ import {
     createActionRemoveMessagesRequest,
 } from "../../store/messages";
 
-//import {getChatsLoadingStatusSelector} from "../../store/chats";
-
 const mapStateToProps = (state, {chatId}) => ({
     messages: messagesSelectors.getMessage(state, chatId),
     isLoading: getMessagesLoadingStatusSelector(state),

@@ -14,72 +14,12 @@ export const initialState = {
  * @param {string} action.payload
  * @param {string} action.payload.id
  * @param {string} action.payload.chatId
+ * @param {string} action.payload.messageId
  * @param {string} action.payload.content
  * */
 
 export const messagesReducer = (state = initialState, action) => {
     switch (action.type) {
-        // case ADD_MESSAGE: {
-        //     const {chatId} = action.payload;
-        //
-        //     if (state.messages.hasOwnProperty(chatId)) {
-        //         state.messages[chatId] = [
-        //             ...state.messages[chatId],
-        //             action.payload,
-        //         ];
-        //     } else {
-        //         state.messages[chatId] = [action.payload];
-        //     }
-        //
-        //     return {
-        //         messages: {
-        //             ...state.messages,
-        //         }
-        //     }
-        // }
-        //
-        // case REMOVE_MESSAGE: {
-        //     let messages = [...state.messages];
-        //
-        //     messages = messages.filter((item) => item.id !== action.payload.id);
-        //
-        //     return {
-        //         messages
-        //     }
-        // }
-        //
-        // case REMOVE_MESSAGES: {
-        //     const chatId = action.payload.id
-        //     let messages = {...state.messages};
-        //
-        //     //const removeProperty = prop => ({ [prop]: _, ...rest }) => rest;
-        //     const removeProperty = (prop) => {
-        //         return ({[prop]: _, ...rest}) => {
-        //             return rest;
-        //         };
-        //     };
-        //
-        //     if (messages.hasOwnProperty(chatId)) {
-        //         const removeChat = removeProperty(chatId);
-        //         messages = removeChat(messages);
-        //     }
-        //
-        //     /*   const messagesOld = {...state.messages};
-        //        if (state.messages.hasOwnProperty(chatId)) {
-        //            // delete messages[action.payload.id];
-        //            for (let key in messagesOld) {
-        //                if (key !== chatId) {
-        //                    messages = {
-        //                        ...messages,
-        //                        [key]: messagesOld[key]
-        //                    }
-        //                }
-        //            }
-        //        }*/
-        // return {
-        //     messages
-        // }
-
         case ADD_MESSAGE_LOADING: {
             return {
                 ...state,
@@ -93,13 +33,6 @@ export const messagesReducer = (state = initialState, action) => {
             }
         }
         case ADD_MESSAGE_SUCCESS: {
-            // return {
-            //     ...state,
-            //     messages: [
-            //         ...state.messages,
-            //         action.payload,
-            //     ]
-            // }
             const {chatId} = action.payload;
 
             if (state.messages.hasOwnProperty(chatId)) {
@@ -117,36 +50,22 @@ export const messagesReducer = (state = initialState, action) => {
             }
         }
         case REMOVE_MESSAGE: {
-            const chatId= action.payload.chatId;
+            const chatId = action.payload.chatId;
             const messageId = action.payload.messageId;
 
             let messages = {...state.messages};
 
-            console.log('action.payload ', action.payload);
+            messages = {
+                ...messages,
+                [chatId]: messages[chatId].filter((message) => message.id !== messageId)
+            };
 
-            //messages.filter ((message) => {console.log('messageId ', message.id)});
-
-            console.log('messageId ', messageId);
-            console.log('chatId ', chatId);
-            console.log('messages ', messages);
-            console.log('messages,chatId ', messages[chatId]);
-
-            messages = {[chatId]:messages[chatId].filter ((message) => message.id !== messageId)};
-
-            console.log('messages ', messages);
-
-            // return {
-            //     ...state,
-            //     messages: [
-            //         ...state.messages.filter((message) => message.id !== action.payload.id),
-            //     ]
-            // }
-
-            //return messages;
-            return state;
+            return {
+                messages
+            }
         }
         case REMOVE_MESSAGES: {
-            const chatId = action.payload.id
+            const chatId = action.payload.id;
             let messages = {...state.messages};
 
             //const removeProperty = prop => ({ [prop]: _, ...rest }) => rest;
