@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from "react";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 import {MessageItem} from "../MessageItem";
 import {List} from "@material-ui/core";
 import styles from "./MessageList.module.sass";
@@ -19,7 +19,7 @@ export const MessageList = ({messageList, nameBot}) => {
         <div className={styles.message__list}>
             <List>
                 {
-                    messageList.map(({id, time, text, author}) => (
+                    messageList?.map(({id, time, text, author}) => (
                         <MessageItem
                             key={id}
                             messageItemTime={time}
@@ -35,6 +35,6 @@ export const MessageList = ({messageList, nameBot}) => {
 };
 
 MessageList.propTypes = {
-    messageList: PropTypes.array.isRequired,
-    nameBot: PropTypes.string.isRequired,
+    messageList: propTypes.array,
+    nameBot: propTypes.string.isRequired,
 };
