@@ -1,22 +1,23 @@
 import React, {useState} from "react";
+import {chatsConnect} from "../../connects/chats";
+
 import faker from "faker";
 
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
+
 import {List, ListItem, ListItemText} from "@material-ui/core";
 import styles from "./Chats.module.sass";
 
 const uuid = () => faker.datatype.uuid();
 
-export const Chats = (props) => {
+export const ChatsRender = ({chats, addChats, removeChats, removeMessages}) => {
 
     const handleRemove = (id) => {
-        const newList = props.chatList.filter((item) => item.id !== id);
-
-        props.setChats(newList);
+        removeChats(id);
+        removeMessages(id);
     };
 
     const handleAddButton = (value) => {
-
         const item = {
             id: uuid(),
             title: value.title,
@@ -24,7 +25,9 @@ export const Chats = (props) => {
             content: faker.lorem.paragraphs(),
         };
 
-        props.chatList.push(item);
+        if (value.title) {
+            addChats(item);
+        }
     };
 
     const ChatForm = ({render, children}) => {
@@ -66,7 +69,7 @@ export const Chats = (props) => {
     return (
         <List className={styles.content}>
             {
-                props.chatList.length ? props.chatList.map(({id, title, description}) =>
+                chats.length ? chats.map(({id, title, description}) =>
                     <ListItem key={id}>
                         <ListItemText primary={id}/>
                         <ListItemText primary={title}/>
@@ -117,7 +120,13 @@ export const Chats = (props) => {
     );
 };
 
-Chats.propTypes = {
-    chatList: PropTypes.array.isRequired,
-    setChats: PropTypes.func.isRequired,
+ChatsRender.propTypes = {
+    chats: propTypes.arrayOf(propTypes.shape({
+        id: propTypes.string,
+        title: propTypes.string,
+        description: propTypes.string,
+        content: propTypes.string,
+    }))
 };
+
+export const Chats = chatsConnect(ChatsRender);

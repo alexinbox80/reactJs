@@ -1,51 +1,93 @@
-import React from "react";
-import {useParams, Redirect} from "react-router-dom";
+import React, {useEffect} from "react";
+import {messagesConnect} from "../../connects/messages";
+import faker from "faker";
+import propTypes from "prop-types";
 
-import PropTypes from "prop-types";
 import {MessageTitle} from "../../components/MessageTitle";
 import {MessageList} from "../../components/MessageList";
 
-export const Chat = (props) => {
+import {useDidUpdate} from "../../hooks/useDidUpdate";
+
+const uuid = () => faker.datatype.uuid();
+
+const toHHMMSS = (mseconds) => (
+    new Date(mseconds)
+        .toTimeString()
+        .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
+);
+
+const SendMessage = (fn, message, chatId, nameBot) => {
+    useEffect(() => {
+        let messagesItem = {
+            chatId,
+            id: uuid(),
+            time: toHHMMSS(Date.now()),
+            text: message,
+            author: nameBot,
+        };
+        fn(messagesItem);
+    }, []);
+};
+
+export const ChatRender = (props) => {
+
     const {
-        ver,
-        didHello,
         chats,
-        setCurrentChat,
-        messageList,
+        messages,
+        addMessage,
+        ver,
+        chatId,
         nameBot,
     } = props;
 
-    const {chatId} = useParams();
-
-    if (chatId) {
-        setCurrentChat(chatId);
-        didHello(chatId);
-    }
-
-    let messages = [];
-
     const currentChat = chats?.find(({id}) => id === chatId);
 
-    if (!currentChat) {
-        return <Redirect to="/NoMatch"/>
+    const DidHello = (chatId) => {
+        SendMessage(addMessage, 'Привет! я бот Петрович', chatId, nameBot);
+        SendMessage(addMessage, 'Как к Вам обращаться?', chatId, nameBot);
+    };
+
+    if (chatId) {
+        DidHello(chatId);
     }
 
-    messageList?.filter(({id}) => id === chatId)
-        .forEach(({message}) => {
-            messages.push({
-                id: message[0].id,
-                time: message[0].time,
-                text: message[0].text,
-                author: message[0].author,
-            });
-        });
+    useDidUpdate(() => {
+        const messageListLength = messages?.length;
+
+        if (messageListLength) {
+
+            if (messages[messageListLength - 1].author !== nameBot) {
+                const userText = messages[messageListLength - 1].text;
+
+                let messagesItem = {
+                    chatId,
+                    id: uuid(),
+                    time: toHHMMSS(Date.now()),
+                    text: 'Здравствуйте, ' + userText + '!',
+                    author: nameBot,
+                };
+
+                addMessage(messagesItem);
+
+                messagesItem = {
+                    chatId,
+                    id: uuid(),
+                    time: toHHMMSS(Date.now()),
+                    text: 'Чем могу помочь?',
+                    author: nameBot,
+                };
+
+                addMessage(messagesItem);
+            }
+        }
+    }, [messages]);
 
     return (
         <>
             <MessageTitle
-                title={currentChat.title}
-                ver={ver}/>
-
+                title={currentChat?.title}
+                ver={ver}
+            />
             <MessageList
                 messageList={messages}
                 nameBot={nameBot}
@@ -54,10 +96,10 @@ export const Chat = (props) => {
     );
 };
 
-Chat.propTypes = {
-    ver: PropTypes.string.isRequired,
-    chats: PropTypes.array.isRequired,
-    setCurrentChat: PropTypes.func.isRequired,
-    messageList: PropTypes.array.isRequired,
-    nameBot: PropTypes.string.isRequired,
+ChatRender.propTypes = {
+    ver: propTypes.string.isRequired,
+    chats: propTypes.array.isRequired,
+    nameBot: propTypes.string.isRequired,
 };
+
+export const Chat = messagesConnect(ChatRender);

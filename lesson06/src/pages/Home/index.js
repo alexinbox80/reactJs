@@ -1,63 +1,39 @@
 import React from "react";
-import {Route} from "react-router-dom";
+import {Route, useParams} from "react-router-dom";
+
+import {chatsConnect} from "../../connects/chats";
 
 import {MessageForm} from "../../components/MessageForm";
 import {ChatList} from "../../components/ChatList";
 
 import {Chat} from "../Chat";
+
 import styles from "./Home.module.sass";
 
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 
-/*
+export const HomeRender = (props) => {
+    const {chatId} = useParams();
 
-    //const currentChat = messageList?.find(({id}) => id === chatId);
-
-    let messages = [];
-
-    const currentMessages = messageList?.filter(({chatId}) => chatId === chatUuId)
-        .forEach((item) => {
-            for (let key in item.message) {
-                messages.push({
-                    id: item.message[key].id,
-                    time: item.message[key].time,
-                    text: item.message[key].text,
-                    author: item.message[key].author,
-                });
-            }
-        });
-
-*/
-
-export const Home = (props) => {
     const {
+        chats,
         projectVersion,
-        didHello,
-        chatList,
-        setCurrentChat,
-        messageList,
         nameBot,
-        inputFocus,
-        onChange,
-        onClick,
-        onKeyDown,
-        value
+        nameUser,
     } = props;
 
     return (
         <>
             <div className={styles.body}>
                 <div className={styles.chats}>
-                    <ChatList chatList={chatList}/>
+                    <ChatList chatList={chats}/>
                 </div>
                 <div className={styles.messages}>
                     <Route path='/home/:chatId'>
                         <Chat
+                            chatId={chatId}
                             ver={projectVersion}
-                            didHello={didHello}
-                            chats={chatList}
-                            setCurrentChat={setCurrentChat}
-                            messageList={messageList}
+                            chats={chats}
                             nameBot={nameBot}
                         />
                     </Route>
@@ -65,26 +41,19 @@ export const Home = (props) => {
             </div>
             <Route path='/home/:chatId'>
                 <MessageForm
-                    inputFocus={inputFocus}
-                    onChange={onChange}
-                    onClick={onClick}
-                    onKeyDown={onKeyDown}
-                    value={value}
+                    chatId={chatId}
+                    nameUser={nameUser}
                 />
             </Route>
         </>
     );
 };
 
-Home.propTypes = {
-    projectVersion: PropTypes.string.isRequired,
-    chatList: PropTypes.array.isRequired,
-    setCurrentChat: PropTypes.func.isRequired,
-    messageList: PropTypes.array.isRequired,
-    nameBot: PropTypes.string.isRequired,
-    inputFocus: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onKeyDown: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
+HomeRender.propTypes = {
+    projectVersion: propTypes.string.isRequired,
+    chats: propTypes.array.isRequired,
+    nameBot: propTypes.string.isRequired,
+    nameUser: propTypes.string.isRequired,
 };
+
+export const Home = chatsConnect(HomeRender);
