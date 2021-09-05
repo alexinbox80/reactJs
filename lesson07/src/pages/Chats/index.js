@@ -10,8 +10,7 @@ import styles from "./Chats.module.sass";
 
 const uuid = () => faker.datatype.uuid();
 
-export const ChatsRender = ({chats, addChats, removeChats, removeMessages}) => {
-
+export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMessages}) => {
     const handleRemove = (id) => {
         removeChats(id);
         removeMessages(id);
@@ -112,6 +111,11 @@ export const ChatsRender = ({chats, addChats, removeChats, removeMessages}) => {
                                 }}>
                                 AddChat
                             </button>
+                            {
+                                isLoading && <div>
+                                    loading...
+                                </div>
+                            }
                         </div>
                     }
                 }

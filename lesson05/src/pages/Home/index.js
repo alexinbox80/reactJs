@@ -17,12 +17,12 @@ import PropTypes from "prop-types";
 
     const currentMessages = messageList?.filter(({chatId}) => chatId === chatUuId)
         .forEach((item) => {
-            for (let key in item.message) {
+            for (let key in item.amessage) {
                 messages.push({
-                    id: item.message[key].id,
-                    time: item.message[key].time,
-                    text: item.message[key].text,
-                    author: item.message[key].author,
+                    id: item.amessage[key].id,
+                    time: item.amessage[key].time,
+                    text: item.amessage[key].text,
+                    author: item.amessage[key].author,
                 });
             }
         });

@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-//import {useDispatch, useSelector} from "react-redux";
 import {createActionRemoveMessages} from "./store/messages";
 
 import {store} from "./store";
@@ -11,10 +10,11 @@ import {Header} from "./components/Header";
 
 import {Home} from "./pages/Home";
 import {Profile} from "./pages/Profile";
+import {Async} from "./pages/Async";
 import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
 
-const PROJECTVERSION = 'v0.6';
+const PROJECTVERSION = 'v0.7';
 const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
@@ -36,6 +36,7 @@ function App() {
                         <Chats removeMessages={RemoveMessages}/>
                     </Route>
                     <Route path="/profile" component={Profile}/>
+                    <Route path="/async" component={Async}/>
                     <Route path="/home/:chatId">
                         <Home
                             projectVersion={PROJECTVERSION}

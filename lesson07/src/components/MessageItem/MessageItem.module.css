@@ -1,3 +1,11 @@
+.message__close {
+  color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
 .message__author {
   display: block;
   text-align: left;
@@ -6,6 +14,7 @@
 }
 
 .message__user {
+  position: relative;
   width: fit-content !important;
   display: block !important;
   margin-left: auto;
@@ -20,6 +29,7 @@
 }
 
 .message__bot {
+  position: relative;
   max-width: fit-content !important;
   display: block !important;
   margin-left: 20px;

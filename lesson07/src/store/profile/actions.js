@@ -7,11 +7,6 @@ export const TOGGLE_CHECKBOX = 'TOGGLE_CHECKBOX';
 
 export const DELETE_CHOOSECHECKBOX = 'DELETE_CHOOSECHECKBOX ';
 
-/**
- * @param
- *
- * */
-
 export const  createActionCreateCheckbox = (payload) => ({
     type: CREATE_CHECKBOX,
     payload

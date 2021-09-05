@@ -1,20 +1,22 @@
 import {connect} from "react-redux";
 import {
     chatsSelectors,
-    createActionAddChat,
-    createActionRemoveChat,
+    getChatsLoadingStatusSelector,
+    createActionAddChatRequest,
+    createActionRemoveChatRequest,
 } from "../../store/chats";
 
 const mapStateToProps = (state) => ({
     chats: chatsSelectors.getChats(state),
+    isLoading: getChatsLoadingStatusSelector(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
     addChats(chats) {
-        return dispatch(createActionAddChat(chats));
+        return dispatch(createActionAddChatRequest(chats));
     },
     removeChats(id) {
-        return dispatch(createActionRemoveChat(id));
+        return dispatch(createActionRemoveChatRequest(id));
     }
 });
 

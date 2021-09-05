@@ -10,8 +10,6 @@ import {Chat} from "../Chat";
 
 import styles from "./Home.module.sass";
 
-import propTypes from "prop-types";
-
 export const HomeRender = (props) => {
     const {chatId} = useParams();
 
