@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import {profileConnect} from "../../connects/profile";
 
@@ -9,7 +9,9 @@ import faker from "faker";
 import {Button, Checkbox, List, ListItem, ListItemText} from "@material-ui/core";
 
 export const ProfileRender = ({profile, createCheckbox, toggleCheckbox, deleteCheckbox, deleteChooseCheckbox}) => {
-    //console.log(profile);
+    useEffect(() => {
+        document.title = 'Profile page';
+    });
 
     const addCheckboxHandler = () => {
         const uuid = () => faker.datatype.uuid();

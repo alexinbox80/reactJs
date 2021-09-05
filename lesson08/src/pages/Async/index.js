@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 import styles from "./Async.module.sass";
@@ -57,6 +57,11 @@ const MessageList = ({messages, onRemove}) => (<div className={styles.messageLis
 </div>);
 
 export const Async = () => {
+
+    useEffect(() => {
+        document.title = 'Async page';
+    });
+
 
     const messages = useSelector(getMessagesSelector);
     const isLoading = useSelector(getMessagesLoadingStatusSelector);

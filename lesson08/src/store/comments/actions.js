@@ -21,7 +21,7 @@ export const changeCommentsData = (data) => ({
     payload: data
 });
 
-export const getCommentsAction = (postId) => async (dispatch) => {
+export const getCommentsActionReguest = (postId) => async (dispatch) => {
     dispatch(changeCommentsError(null));
     dispatch(changeCommentsData(null));
     dispatch(changeCommentsLoading(true));

@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {commentsSelectors, getCommentsAction} from "../../store/comments";
+import {commentsSelectors, getCommentsActionReguest} from "../../store/comments";
 
 const mapStateToProps = (state) => ({
     comments: commentsSelectors.getComments(state),
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     commentsAction(postId) {
-        return dispatch(getCommentsAction(postId));
+        return dispatch(getCommentsActionReguest(postId));
     }
 });
 
