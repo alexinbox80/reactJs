@@ -13,6 +13,8 @@ import {Profile} from "./pages/Profile";
 import {Async} from "./pages/Async";
 import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
+import {SignUp} from "./pages/SignUp";
+import {Login} from "./pages/Login";
 
 const PROJECTVERSION = 'v0.9';
 const NAMEBOT = 'bot';
@@ -37,6 +39,8 @@ function App() {
                     </Route>
                     <Route path="/profile" component={Profile}/>
                     <Route path="/async" component={Async}/>
+                    <Route path="/signup" component={SignUp}/>
+                    <Route path="/login" component={Login}/>
                     <Route path="/home/:chatId">
                         <Home
                             projectVersion={PROJECTVERSION}

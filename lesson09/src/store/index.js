@@ -30,4 +30,4 @@ export const store = createStore(persistReducer(persistConfig, rootReducer), com
     applyMiddleware(thunk),
 ));
 
-export const persistor = persistStore(store);
+//export const persistor = persistStore(store);

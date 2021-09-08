@@ -57,6 +57,28 @@ export const Header = () => {
                 component={RouterLink}
                 color="inherit"
                 noWrap
+                key="signup"
+                varint="body2"
+                to="/signup"
+                className={classes.toolbarLink}
+            >
+                Sign Up
+            </Link>
+            <Link
+                component={RouterLink}
+                color="inherit"
+                noWrap
+                key="login"
+                varint="body2"
+                to="/login"
+                className={classes.toolbarLink}
+            >
+                Login
+            </Link>
+            <Link
+                component={RouterLink}
+                color="inherit"
+                noWrap
                 key="chats"
                 varint="body2"
                 to="/chats"
