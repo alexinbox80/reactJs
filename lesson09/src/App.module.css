@@ -1,0 +1,12 @@
+.wrapper {
+  margin: 0 calc(50% - 500px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+  margin: 20px;
+}
+
+/*# sourceMappingURL=App.module.css.map */
