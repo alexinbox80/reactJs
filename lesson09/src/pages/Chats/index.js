@@ -7,25 +7,49 @@ import propTypes from "prop-types";
 
 import {List, ListItem, ListItemText} from "@material-ui/core";
 import styles from "./Chats.module.sass";
+import {chatsApi} from "../../api/request/chats";
 
-const uuid = () => faker.datatype.uuid();
+//const uuid = () => faker.datatype.uuid();
 
-export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMessages}) => {
-    const handleRemove = (id) => {
-        removeChats(id);
-        removeMessages(id);
+export const ChatsRender = (props) => {
+
+    const {isLoading, chats, addChats, removeChats, removeMessages} = props;
+
+    console.log('props ', props);
+
+    const [error, setError] = useState('');
+
+    const handleRemove = async (id) => {
+        // removeChats(id);
+        // removeMessages(id);
+        setError(null);
+
+        try {
+            await chatsApi.delete(id);
+        } catch (err) {
+            setError(err);
+        }
+
     };
 
-    const handleAddButton = (value) => {
+    const handleAddButton = async (value) => {
         const item = {
-            id: uuid(),
+            //id: uuid(),
             title: value.title,
             description: value.description,
             content: faker.lorem.paragraphs(),
         };
 
         if (value.title) {
-            addChats(item);
+            //addChats(item);
+
+            setError(null);
+
+            try {
+                await chatsApi.create(item);
+            } catch (err) {
+                setError(err);
+            }
         }
     };
 
@@ -103,6 +127,7 @@ export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMess
                                 type="text"
                             />
                             &nbsp;
+                            {error && <p>{error}</p>}
                             <button
                                 type="button"
                                 onClick={() => {

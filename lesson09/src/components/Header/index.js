@@ -3,6 +3,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
+import {userApi} from "../../api/request/user";
 
 const useStyles = makeStyles((theme) => ({
     toolbarSecondary: {
@@ -57,6 +58,17 @@ export const Header = () => {
                 component={RouterLink}
                 color="inherit"
                 noWrap
+                key="chats"
+                varint="body2"
+                to="/chats"
+                className={classes.toolbarLink}
+            >
+                chats
+            </Link>
+            <Link
+                component={RouterLink}
+                color="inherit"
+                noWrap
                 key="signup"
                 varint="body2"
                 to="/signup"
@@ -79,12 +91,13 @@ export const Header = () => {
                 component={RouterLink}
                 color="inherit"
                 noWrap
-                key="chats"
+                key="logout"
                 varint="body2"
-                to="/chats"
+                to=""
                 className={classes.toolbarLink}
+                onClick={userApi.logout}
             >
-                chats
+                Logout
             </Link>
         </Toolbar>
     );

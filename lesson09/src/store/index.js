@@ -8,6 +8,7 @@ import {chatsReducer} from "./chats";
 import {messagesReducer} from "./messages";
 import {profileReducer} from "./profile";
 import {asyncReducer} from "./async";
+import {userReducer} from "./user";
 
 const persistConfig = {
     key: 'root',
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     messages: messagesReducer,
     profile: profileReducer,
     async: asyncReducer,
+    user: userReducer
 });
 
 /**

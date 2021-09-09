@@ -15,12 +15,28 @@ import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
 import {SignUp} from "./pages/SignUp";
 import {Login} from "./pages/Login";
+import {useDispatch, useSelector} from "react-redux";
+import {getIsAuth, initAuthAction} from "./store/user";
+
+import {PrivateRoute} from "./hocs/PrivateRoute";
+import {PublicRoute} from "./hocs/PublicRoute";
+import {initChatsTracking} from "./store/chats";
 
 const PROJECTVERSION = 'v0.9';
 const NAMEBOT = 'bot';
 const NAMEUSER = 'user';
 
 function App() {
+
+    const isAuth = useSelector(getIsAuth);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(initAuthAction);
+        dispatch(initChatsTracking);
+    }, []);
+
     useEffect(() => {
         document.title = 'Chat Bot ver: ' + PROJECTVERSION;
     });
@@ -34,30 +50,30 @@ function App() {
             <div className={styles.content}>
                 <Header/>
                 <Switch>
-                    <Route path="/chats">
+                    <PrivateRoute auth={isAuth} path="/chats">
                         <Chats removeMessages={RemoveMessages}/>
-                    </Route>
-                    <Route path="/profile" component={Profile}/>
+                    </PrivateRoute>
+                    <PrivateRoute auth={isAuth} path="/profile" component={Profile}/>
                     <Route path="/async" component={Async}/>
-                    <Route path="/signup" component={SignUp}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/home/:chatId">
+                    <PublicRoute auth={isAuth} path="/signup" component={SignUp}/>
+                    <PublicRoute auth={isAuth} path="/login" component={Login}/>
+                    <PrivateRoute auth={isAuth} path="/home/:chatId">
                         <Home
                             projectVersion={PROJECTVERSION}
                             nameBot={NAMEBOT}
                             nameUser={NAMEUSER}
                         />
-                    </Route>
-                    <Route exact path="/">
+                    </PrivateRoute>
+                    <PrivateRoute auth={isAuth} exact path="/">
                         <Home
                             projectVersion={PROJECTVERSION}
                             nameBot={NAMEBOT}
                             nameUser={NAMEUSER}
                         />
-                    </Route>
-                    <Route path="*">
+                    </PrivateRoute>
+                    <PublicRoute auth={isAuth} path="*">
                         <NoMatch/>
-                    </Route>
+                    </PublicRoute>
                 </Switch>
             </div>
         </div>

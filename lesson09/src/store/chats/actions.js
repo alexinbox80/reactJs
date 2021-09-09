@@ -1,6 +1,8 @@
 import {chatApi} from "../../api/v1/chatApi";
+import {chatsApi} from "../../api/request/chats";
 
 export const ADD_CHAT = 'ADD_CHAT';
+
 export const ADD_CHAT_LOADING = 'ADD_CHAT_LOADING';
 export const ADD_CHAT_SUCCESS = 'ADD_CHAT_SUCCESS';
 export const ADD_CHAT_ERROR = 'ADD_CHAT_ERROR';
@@ -19,6 +21,21 @@ export const createActionAddChat = (chat) => ({
     type: ADD_CHAT,
     payload: chat,
 });
+
+export const initChatsTracking = (dispatch) => {
+
+    //dispatch(createActionAddChatLoading(true));
+
+    let i = 0;
+    chatsApi.getList((chat) => {
+        dispatch(createActionAddChat(chat));
+        console.log('action chat ', chat, ' i ', i);
+        i++;
+    });
+
+    //dispatch(createActionAddChatLoading(false));
+
+};
 
 export const createActionAddChatLoading = (isLoading) => ({
     type: ADD_CHAT_LOADING,

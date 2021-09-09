@@ -1,4 +1,4 @@
-import {ADD_CHAT_ERROR, ADD_CHAT_LOADING, ADD_CHAT_SUCCESS, REMOVE_CHAT} from "./actions";
+import {ADD_CHAT, ADD_CHAT_ERROR, ADD_CHAT_LOADING, ADD_CHAT_SUCCESS, REMOVE_CHAT} from "./actions";
 
 export const initialState = {
     chats: [],
@@ -8,6 +8,15 @@ export const initialState = {
 
 export const chatsReducer = (state = initialState, action) => {
     switch (action.type) {
+        case ADD_CHAT: {
+            return {
+                ...state,
+                chats: [
+                    ...state.chats,
+                    action.payload,
+                ]
+            }
+        }
         case ADD_CHAT_LOADING: {
             return {
                 ...state,
