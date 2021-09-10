@@ -4,7 +4,7 @@ import {MessageItem} from "../MessageItem";
 import {List} from "@material-ui/core";
 import styles from "./MessageList.module.sass";
 
-export const MessageList = ({messageList, nameBot, removeMessage}) => {
+export const MessageList = ({messageList, nameUser, removeMessage}) => {
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -27,7 +27,7 @@ export const MessageList = ({messageList, nameBot, removeMessage}) => {
                             messageItemTime={time}
                             messageItemText={text}
                             messageItemAuthor={author}
-                            nameBot={nameBot}/>
+                            nameUser={nameUser}/>
                     ))
                 }
             </List>
@@ -38,6 +38,6 @@ export const MessageList = ({messageList, nameBot, removeMessage}) => {
 
 MessageList.propTypes = {
     messageList: propTypes.array,
-    nameBot: propTypes.string.isRequired,
+    nameUser: propTypes.string.isRequired,
     removeMessage: propTypes.func
 };

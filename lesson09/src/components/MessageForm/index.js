@@ -5,11 +5,8 @@ import {messagesApi} from "../../api/request/messages";
 import {useSimpleForm} from "../../hooks/useSimpleForm";
 import {Button, Input} from "@material-ui/core";
 
-import faker from "faker";
 import {useStyles} from "./styles";
 import propTypes from "prop-types";
-
-//const uuid = () => faker.datatype.uuid();
 
 const toHHMMSS = (mseconds) => (
     new Date(mseconds)
@@ -33,16 +30,23 @@ export const MessageForm = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        //id, time, text, author
+        //time, text, author
         const messagesItem = {
             chatId: props.chatId,
-            //id: uuid(),
             time: toHHMMSS(Date.now()),
             text: getFieldValue('message'),
             author: props.nameUser,
         };
 
-        //props.addMessage(messagesItem);
+        // const messagesItem = {
+        //     [props.chatId]: {
+        //         time: toHHMMSS(Date.now()),
+        //         text: getFieldValue('message'),
+        //         author: props.nameUser,
+        //     }
+        // };
+
+        inputFocus.current?.focus();
 
         setError(null);
 
@@ -51,8 +55,6 @@ export const MessageForm = (props) => {
         } catch (error) {
             setError(error);
         }
-
-        inputFocus.current?.focus();
 
         resetForm();
     };
@@ -85,7 +87,7 @@ export const MessageForm = (props) => {
     );
 };
 
-// MessageForm.propTypes = {
-//     chatId: propTypes.string.isRequired,
-//     nameUser: propTypes.string.isRequired,
-// };
+MessageForm.propTypes = {
+    chatId: propTypes.string,
+    nameUser: propTypes.string.isRequired,
+};

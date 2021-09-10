@@ -16,11 +16,9 @@ export const createActionAddMessage = (messages) => ({
 });
 
 export const initMessagesTracking = (dispatch) => {
-
     messagesApi.getList((messages) => {
         dispatch(createActionAddMessageLoading(true));
         dispatch(createActionAddMessage(messages));
         dispatch(createActionAddMessageLoading(false));
     });
-
 };

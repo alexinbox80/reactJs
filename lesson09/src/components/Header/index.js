@@ -47,17 +47,6 @@ export const Header = () => {
                 component={RouterLink}
                 color="inherit"
                 noWrap
-                key="async"
-                varint="body2"
-                to="/async"
-                className={classes.toolbarLink}
-            >
-                async
-            </Link>
-            <Link
-                component={RouterLink}
-                color="inherit"
-                noWrap
                 key="chats"
                 varint="body2"
                 to="/chats"

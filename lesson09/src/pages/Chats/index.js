@@ -10,6 +10,7 @@ import propTypes from "prop-types";
 
 import {List, ListItem, ListItemText} from "@material-ui/core";
 import styles from "./Chats.module.sass";
+import {messagesApi} from "../../api/request/messages";
 
 export const Chats = ({chats}) => {
 
@@ -22,6 +23,7 @@ export const Chats = ({chats}) => {
 
         try {
             await chatsApi.delete(id);
+            await messagesApi.delete(id);
         } catch (err) {
             setError(err);
         }

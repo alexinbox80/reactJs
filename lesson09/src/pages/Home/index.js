@@ -16,7 +16,6 @@ export const Home = (props) => {
     const {
         chats,
         projectVersion,
-        nameBot,
         nameUser,
     } = props;
 
@@ -29,10 +28,10 @@ export const Home = (props) => {
                 <div className={styles.messages}>
                     <Route path='/home/:chatId'>
                         <Chat
-                            chatId={chatId}
+                            chatID={chatId}
                             ver={projectVersion}
                             chats={chats}
-                            nameBot={nameBot}
+                            nameUser={nameUser}
                         />
                     </Route>
                 </div>
@@ -50,6 +49,5 @@ export const Home = (props) => {
 Home.propTypes = {
     projectVersion: propTypes.string.isRequired,
     chats: propTypes.array.isRequired,
-    nameBot: propTypes.string.isRequired,
     nameUser: propTypes.string.isRequired,
 };
