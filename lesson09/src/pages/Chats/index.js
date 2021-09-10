@@ -1,5 +1,8 @@
 import React, {useState} from "react";
-import {chatsConnect} from "../../connects/chats";
+import {useSelector} from "react-redux";
+
+import {chatsApi} from "../../api/request/chats";
+import {getChatLoading} from "../../store/chats/selectors";
 
 import faker from "faker";
 
@@ -7,21 +10,14 @@ import propTypes from "prop-types";
 
 import {List, ListItem, ListItemText} from "@material-ui/core";
 import styles from "./Chats.module.sass";
-import {chatsApi} from "../../api/request/chats";
 
-//const uuid = () => faker.datatype.uuid();
-
-export const ChatsRender = (props) => {
-
-    const {isLoading, chats, addChats, removeChats, removeMessages} = props;
-
-    console.log('props ', props);
+export const Chats = ({chats}) => {
 
     const [error, setError] = useState('');
 
+    const isLoading = useSelector(getChatLoading);
+
     const handleRemove = async (id) => {
-        // removeChats(id);
-        // removeMessages(id);
         setError(null);
 
         try {
@@ -34,14 +30,12 @@ export const ChatsRender = (props) => {
 
     const handleAddButton = async (value) => {
         const item = {
-            //id: uuid(),
             title: value.title,
             description: value.description,
             content: faker.lorem.paragraphs(),
         };
 
         if (value.title) {
-            //addChats(item);
 
             setError(null);
 
@@ -92,7 +86,7 @@ export const ChatsRender = (props) => {
     return (
         <List className={styles.content}>
             {
-                chats.length ? chats.map(({id, title, description}) =>
+                chats.length ? chats?.map(({id, title, description}) =>
                     <ListItem key={id}>
                         <ListItemText primary={id}/>
                         <ListItemText primary={title}/>
@@ -149,7 +143,7 @@ export const ChatsRender = (props) => {
     );
 };
 
-ChatsRender.propTypes = {
+Chats.propTypes = {
     chats: propTypes.arrayOf(propTypes.shape({
         id: propTypes.string,
         title: propTypes.string,
@@ -158,4 +152,3 @@ ChatsRender.propTypes = {
     }))
 };
 
-export const Chats = chatsConnect(ChatsRender);

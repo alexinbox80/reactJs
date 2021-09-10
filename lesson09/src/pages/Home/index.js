@@ -1,8 +1,6 @@
 import React from "react";
 import {Route, useParams} from "react-router-dom";
 
-import {chatsConnect} from "../../connects/chats";
-
 import {MessageForm} from "../../components/MessageForm";
 import {ChatList} from "../../components/ChatList";
 
@@ -12,7 +10,7 @@ import styles from "./Home.module.sass";
 
 import propTypes from "prop-types";
 
-export const HomeRender = (props) => {
+export const Home = (props) => {
     const {chatId} = useParams();
 
     const {
@@ -49,11 +47,9 @@ export const HomeRender = (props) => {
     );
 };
 
-HomeRender.propTypes = {
+Home.propTypes = {
     projectVersion: propTypes.string.isRequired,
     chats: propTypes.array.isRequired,
     nameBot: propTypes.string.isRequired,
     nameUser: propTypes.string.isRequired,
 };
-
-export const Home = chatsConnect(HomeRender);

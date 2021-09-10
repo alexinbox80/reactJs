@@ -2,6 +2,8 @@ import {Link, useHistory} from "react-router-dom";
 import React, {useState} from "react";
 import {userApi} from "../../api/request/user";
 
+import styles from "./SignUp.module.sass";
+
 export const SignUp = () => {
     const {push} = useHistory();
 
@@ -22,7 +24,6 @@ export const SignUp = () => {
         e.preventDefault();
         setError(null);
         try {
-            //todo
             await userApi.registration(email, password);
             push('/login');
         } catch (error) {
@@ -32,7 +33,7 @@ export const SignUp = () => {
     };
 
     return (
-        <div>
+        <div className={styles.content}>
             <form onSubmit={handleSubmit}>
                 <p>Fill fields in the form below to register new account.</p>
                 <div>

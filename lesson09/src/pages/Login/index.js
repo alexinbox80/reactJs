@@ -2,6 +2,8 @@ import {useHistory} from "react-router-dom";
 import React, {useState} from "react";
 import {userApi} from "../../api/request/user";
 
+import styles from "./Login.module.sass";
+
 export const Login = () => {
     const {push} = useHistory();
 
@@ -22,7 +24,6 @@ export const Login = () => {
         e.preventDefault();
         setError(null);
         try {
-            //todo
             await userApi.login(email, password);
             push('/');
         } catch (error) {
@@ -32,7 +33,7 @@ export const Login = () => {
     };
 
     return (
-        <div>
+        <div className={styles.content}>
             <form onSubmit={handleSubmit}>
                 <p>Fill fields in the form below to login on chat.</p>
                 <div>

@@ -12,7 +12,7 @@ export const ChatList = ({chatList}) => {
         <List className={styles.list}>
             <ListItem className={styles.item} key={'0'}>Chats&nbsp;:</ListItem>
             {
-                chatList.map(({id, title}) => (
+                chatList?.map(({id, title}) => (
                     <ListItem key={id} component={RouterLink} to={`/home/${id}`}>
                         <ChatItem key={id} chatListName={title}/>
                     </ListItem>

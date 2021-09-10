@@ -4,11 +4,11 @@ import {persistReducer, persistStore} from "redux-persist";
 import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 
-import {chatsReducer} from "./chats";
 import {messagesReducer} from "./messages";
 import {profileReducer} from "./profile";
 import {asyncReducer} from "./async";
 import {userReducer} from "./user";
+import {chatsReducer} from "./chats";
 
 const persistConfig = {
     key: 'root',

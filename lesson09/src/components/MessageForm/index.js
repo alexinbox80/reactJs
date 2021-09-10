@@ -1,15 +1,15 @@
-import {useEffect, useRef} from "react";
+import {useState, useEffect, useRef} from "react";
+
+import {messagesApi} from "../../api/request/messages";
 
 import {useSimpleForm} from "../../hooks/useSimpleForm";
-import {messagesConnect} from "../../connects/messages";
-
-import {Input, Button} from "@material-ui/core";
+import {Button, Input} from "@material-ui/core";
 
 import faker from "faker";
 import {useStyles} from "./styles";
 import propTypes from "prop-types";
 
-const uuid = () => faker.datatype.uuid();
+//const uuid = () => faker.datatype.uuid();
 
 const toHHMMSS = (mseconds) => (
     new Date(mseconds)
@@ -17,7 +17,10 @@ const toHHMMSS = (mseconds) => (
         .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
 );
 
-export const MessageFormRender = (props) => {
+export const MessageForm = (props) => {
+
+    const [error, setError] = useState('');
+
     const classes = useStyles();
     const inputFocus = useRef(null);
 
@@ -27,19 +30,27 @@ export const MessageFormRender = (props) => {
 
     const {setFieldValue, getFieldValue, resetForm} = useSimpleForm({});
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         //id, time, text, author
         const messagesItem = {
             chatId: props.chatId,
-            id: uuid(),
+            //id: uuid(),
             time: toHHMMSS(Date.now()),
             text: getFieldValue('message'),
             author: props.nameUser,
         };
 
-        props.addMessage(messagesItem);
+        //props.addMessage(messagesItem);
+
+        setError(null);
+
+        try {
+            await messagesApi.create(messagesItem);
+        } catch (error) {
+            setError(error);
+        }
 
         inputFocus.current?.focus();
 
@@ -47,33 +58,34 @@ export const MessageFormRender = (props) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
-            <Input
-                id="input__message"
-                className={classes.input}
-                placeholder="Input message and press Enter"
-                name="message"
-                type="text"
-                disableUnderline={true}
-                autoFocus={true}
-                inputRef={inputFocus}
-                value={getFieldValue('message')}
-                onChange={(event) => {
-                    setFieldValue('message', event.target.value);
-                }}
-                label="Content"/>
-            <Button
-                className={classes.button}
-                type="submit">
-                Send Message
-            </Button>
-        </form>
+        <>
+            {error && <p>{error}</p>}
+            <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="off">
+                <Input
+                    id="input__message"
+                    className={classes.input}
+                    placeholder="Input message and press Enter"
+                    name="message"
+                    type="text"
+                    disableUnderline={true}
+                    autoFocus={true}
+                    inputRef={inputFocus}
+                    value={getFieldValue('message')}
+                    onChange={(event) => {
+                        setFieldValue('message', event.target.value);
+                    }}
+                    label="Content"/>
+                <Button
+                    className={classes.button}
+                    type="submit">
+                    Send Message
+                </Button>
+            </form>
+        </>
     );
 };
 
-MessageFormRender.propTypes = {
-    chatId: propTypes.string.isRequired,
-    nameUser: propTypes.string.isRequired,
-};
-
-export const MessageForm = messagesConnect(MessageFormRender);
+// MessageForm.propTypes = {
+//     chatId: propTypes.string.isRequired,
+//     nameUser: propTypes.string.isRequired,
+// };

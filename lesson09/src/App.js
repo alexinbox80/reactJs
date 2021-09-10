@@ -1,7 +1,8 @@
-import {useEffect} from "react";
-import {createActionRemoveMessages} from "./store/messages";
+import {useEffect, useRef} from "react";
+import {initChatsTracking} from "./store/chats";
+import {initMessagesTracking} from "./store/messages";
 
-import {store} from "./store";
+//import {store} from "./store";
 
 import {Route, Switch} from "react-router-dom";
 import styles from "./App.module.sass";
@@ -15,12 +16,13 @@ import {Chats} from "./pages/Chats";
 import {NoMatch} from "./pages/NoMatch";
 import {SignUp} from "./pages/SignUp";
 import {Login} from "./pages/Login";
+
 import {useDispatch, useSelector} from "react-redux";
 import {getIsAuth, initAuthAction} from "./store/user";
+import {getChats} from "./store/chats/selectors";
 
 import {PrivateRoute} from "./hocs/PrivateRoute";
 import {PublicRoute} from "./hocs/PublicRoute";
-import {initChatsTracking} from "./store/chats";
 
 const PROJECTVERSION = 'v0.9';
 const NAMEBOT = 'bot';
@@ -30,11 +32,21 @@ function App() {
 
     const isAuth = useSelector(getIsAuth);
 
+    const prevIsAuth = useRef(isAuth);
+
+    const chats = useSelector((state) => getChats(state).chats);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (isAuth !== prevIsAuth) {
+            dispatch(initChatsTracking);
+            dispatch(initMessagesTracking);
+        }
+    }, [isAuth]);
+
+    useEffect(() => {
         dispatch(initAuthAction);
-        dispatch(initChatsTracking);
     }, []);
 
     useEffect(() => {
@@ -42,7 +54,8 @@ function App() {
     });
 
     const RemoveMessages = (id) => {
-        store.dispatch(createActionRemoveMessages(id));
+        //store.dispatch(createActionRemoveMessages(id));
+        console.log('RemoveMessages ', id);
     };
 
     return (
@@ -51,7 +64,7 @@ function App() {
                 <Header/>
                 <Switch>
                     <PrivateRoute auth={isAuth} path="/chats">
-                        <Chats removeMessages={RemoveMessages}/>
+                        <Chats chats={chats} removeMessages={RemoveMessages}/>
                     </PrivateRoute>
                     <PrivateRoute auth={isAuth} path="/profile" component={Profile}/>
                     <Route path="/async" component={Async}/>
@@ -59,6 +72,7 @@ function App() {
                     <PublicRoute auth={isAuth} path="/login" component={Login}/>
                     <PrivateRoute auth={isAuth} path="/home/:chatId">
                         <Home
+                            chats={chats}
                             projectVersion={PROJECTVERSION}
                             nameBot={NAMEBOT}
                             nameUser={NAMEUSER}
@@ -66,6 +80,7 @@ function App() {
                     </PrivateRoute>
                     <PrivateRoute auth={isAuth} exact path="/">
                         <Home
+                            chats={chats}
                             projectVersion={PROJECTVERSION}
                             nameBot={NAMEBOT}
                             nameUser={NAMEUSER}
