@@ -12,6 +12,13 @@ import {List, ListItem, ListItemText} from "@material-ui/core";
 import styles from "./Chats.module.sass";
 import {messagesApi} from "../../api/request/messages";
 
+export const ChatsTextIDs = {
+    title: 'Chats_title',
+    titleField: 'Chats_titleField',
+    descriptionField: 'Chats_descriptionField',
+    clickButton: 'Chats_clickButton'
+};
+
 export const Chats = ({chats}) => {
 
     const [error, setError] = useState('');
@@ -86,62 +93,70 @@ export const Chats = ({chats}) => {
     };
 
     return (
-        <List className={styles.content}>
-            {
-                chats.length ? chats?.map(({id, title, description}) =>
-                    <ListItem key={id}>
-                        <ListItemText primary={id}/>
-                        <ListItemText primary={title}/>
-                        <ListItemText primary={description}/>
-                        <button type="button" onClick={() => handleRemove(id)}>
-                            Remove Chat
-                        </button>
-                    </ListItem>
-                ) : null
-            }
-            <ChatForm>
+        <>
+            <h1 data-testid={ChatsTextIDs.title}>
+                Page For Add Chat.
+            </h1>
+            <List className={styles.content}>
                 {
-                    (props) => {
-                        return <div>
-                            <input
-                                onChange={(event) => {
-                                    const value = event.target.value;
-                                    props.setFieldValue('title', value);
-                                }}
-                                value={props.formValue['title'] || ''}
-                                name="title"
-                                type="text"
-                            />
-                            &nbsp;
-                            <input
-                                onChange={(event) => {
-                                    const value = event.target.value;
-                                    props.setFieldValue('description', value);
-                                }}
-                                value={props.formValue['description'] || ''}
-                                name="description"
-                                type="text"
-                            />
-                            &nbsp;
-                            {error && <p>{error}</p>}
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    handleAddButton(props.formValue);
-                                    props.resetForm();
-                                }}>
-                                AddChat
+                    chats.length ? chats?.map(({id, title, description}) =>
+                        <ListItem key={id}>
+                            <ListItemText primary={id}/>
+                            <ListItemText primary={title}/>
+                            <ListItemText primary={description}/>
+                            <button type="button" onClick={() => handleRemove(id)}>
+                                Remove Chat
                             </button>
-                            {
-                                isLoading && <div>
-                                    loading...
-                                </div>
-                            }
-                        </div>
-                    }
+                        </ListItem>
+                    ) : null
                 }
-            </ChatForm>
-        </List>
+                <ChatForm>
+                    {
+                        (props) => {
+                            return <div>
+                                <input
+                                    data-testid={ChatsTextIDs.titleField}
+                                    onChange={(event) => {
+                                        const value = event.target.value;
+                                        props.setFieldValue('title', value);
+                                    }}
+                                    value={props.formValue['title'] || ''}
+                                    name="title"
+                                    type="text"
+                                />
+                                &nbsp;
+                                <input
+                                    data-testid={ChatsTextIDs.descriptionField}
+                                    onChange={(event) => {
+                                        const value = event.target.value;
+                                        props.setFieldValue('description', value);
+                                    }}
+                                    value={props.formValue['description'] || ''}
+                                    name="description"
+                                    type="text"
+                                />
+                                &nbsp;
+                                {error && <p>{error}</p>}
+                                <button
+                                    data-testid={ChatsTextIDs.clickButton}
+                                    type="button"
+                                    onClick={() => {
+                                        handleAddButton(props.formValue);
+                                        props.resetForm();
+                                    }}>
+                                    AddChat
+                                </button>
+                                {
+                                    isLoading && <div>
+                                        loading...
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                </ChatForm>
+            </List>
+        </>
     );
 };
 
