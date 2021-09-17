@@ -4,6 +4,12 @@ import {userApi} from "../../api/request/user";
 
 import styles from "./Login.module.sass";
 
+export const LoginFormTestIds = {
+    loginField: 'LoginForm-loginField',
+    passwordField: 'LoginForm-passwordField',
+    submit: 'LoginForm-submit',
+};
+
 export const Login = () => {
     const {push} = useHistory();
 
@@ -38,6 +44,7 @@ export const Login = () => {
                 <p>Fill fields in the form below to login on chat.</p>
                 <div>
                     <input
+                        data-testid={LoginFormTestIds.loginField}
                         placeholder="Email"
                         name="email"
                         type="text"
@@ -47,6 +54,7 @@ export const Login = () => {
                 </div>
                 <div>
                     <input
+                        data-testid={LoginFormTestIds.passwordField}
                         placeholder="Password"
                         name="password"
                         type="password"
@@ -56,7 +64,9 @@ export const Login = () => {
                 </div>
                 <div>
                     {error && <p>{error}</p>}
-                    <button type="submit">Login</button>
+                    <button
+                        data-testid={LoginFormTestIds.submit}
+                        type="submit">Login</button>
                 </div>
             </form>
         </div>
