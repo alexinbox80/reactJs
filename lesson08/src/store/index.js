@@ -1,6 +1,6 @@
 import {createStore, combineReducers, compose, applyMiddleware} from "redux";
 import {persistReducer, persistStore} from "redux-persist";
-//import {persistReducer} from "redux-persist";
+
 import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 
@@ -8,6 +8,7 @@ import {chatsReducer} from "./chats";
 import {messagesReducer} from "./messages";
 import {profileReducer} from "./profile";
 import {asyncReducer} from "./async";
+import {commentsReducer} from "./comments";
 
 const persistConfig = {
     key: 'root',
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     messages: messagesReducer,
     profile: profileReducer,
     async: asyncReducer,
+    comments: commentsReducer,
 });
 
 /**
@@ -30,4 +32,4 @@ export const store = createStore(persistReducer(persistConfig, rootReducer), com
     applyMiddleware(thunk),
 ));
 
-export const persistor = persistStore(store);
+//export const persistor = persistStore(store);

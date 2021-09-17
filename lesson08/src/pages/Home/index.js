@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Route, useParams} from "react-router-dom";
 
 import {chatsConnect} from "../../connects/chats";
@@ -21,6 +21,10 @@ export const HomeRender = (props) => {
         nameBot,
         nameUser,
     } = props;
+
+    useEffect(() => {
+        document.title = 'Chat Bot ver: ' + projectVersion;
+    });
 
     return (
         <>
