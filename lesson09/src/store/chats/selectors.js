@@ -1,8 +1,5 @@
 
-const getChats = (state) => state.chats?.chats || [];
+export const getChats = (state) => state.chats;
 
-export const chatsSelectors = {
-    getChats
-};
+export const getChatLoading = (state) => getChats(state).isLoading;
 
-export const getChatsLoadingStatusSelector = (state) => state.chats.isLoading;

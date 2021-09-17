@@ -1,41 +1,22 @@
-import {ADD_CHAT_ERROR, ADD_CHAT_LOADING, ADD_CHAT_SUCCESS, REMOVE_CHAT} from "./actions";
+import {ADD_CHATS, ADD_CHATS_LOADING} from "./actions";
 
 export const initialState = {
     chats: [],
     isLoading: false,
-    error: null,
 };
 
 export const chatsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_CHAT_LOADING: {
+        case ADD_CHATS_LOADING: {
             return {
                 ...state,
                 isLoading: action.payload,
             }
         }
-        case ADD_CHAT_ERROR: {
+        case ADD_CHATS: {
             return {
-                ...state,
-                error: action.payload,
-            }
-        }
-        case ADD_CHAT_SUCCESS: {
-            return {
-                ...state,
-                chats: [
-                    ...state.chats,
-                    action.payload,
-                ]
-            }
-        }
-        case REMOVE_CHAT: {
-            return {
-                ...state,
-                chats: [
-                    ...state.chats.filter((chat) => chat.id !== action.payload.id),
-                ]
-            }
+                chats: action.payload
+            };
         }
         default: {
             return state;

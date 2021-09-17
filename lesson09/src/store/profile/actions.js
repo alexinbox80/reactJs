@@ -1,28 +1,25 @@
+import {profileApi} from "../../api/request/profile";
 
-export const CREATE_CHECKBOX = 'CREATE_CHECKBOX';
+export const ADD_PROFILE = 'ADD_PROFILE';
 
-export const DELETE_CHECKBOX = 'DELETE_CHECKBOX';
+export const ADD_PROFILE_LOADING = 'ADD_CHATS_PROFILE';
 
-export const TOGGLE_CHECKBOX = 'TOGGLE_CHECKBOX';
-
-export const DELETE_CHOOSECHECKBOX = 'DELETE_CHOOSECHECKBOX ';
-
-export const  createActionCreateCheckbox = (payload) => ({
-    type: CREATE_CHECKBOX,
-    payload
+export const createActionAddProfileLoading = (isLoading) => ({
+    type: ADD_PROFILE_LOADING,
+    payload: isLoading,
 });
 
-export const  createActionDeleteCheckbox = (id) => ({
-    type: DELETE_CHECKBOX,
-    payload: {id}
+export const createActionAddProfile = (profile) => ({
+    type: ADD_PROFILE,
+    payload: profile,
 });
 
-export const  createActionToggleCheckbox = (id, status) => ({
-    type: TOGGLE_CHECKBOX,
-    payload: {id, status}
-});
+export const initProfileTracking = (uid) => async (dispatch) => {
 
-export const  createActionDeleteChooseCheckbox = (status) => ({
-    type: DELETE_CHOOSECHECKBOX,
-    payload: {status}
-});
+    profileApi.getList((profile) => {
+        dispatch(createActionAddProfileLoading(true));
+        dispatch(createActionAddProfile(profile));
+        dispatch(createActionAddProfileLoading(false));
+    }, uid);
+
+};

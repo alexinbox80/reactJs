@@ -1,5 +1,8 @@
 import React, {useState} from "react";
-import {chatsConnect} from "../../connects/chats";
+import {useSelector} from "react-redux";
+
+import {chatsApi} from "../../api/request/chats";
+import {getChatLoading} from "../../store/chats/selectors";
 
 import faker from "faker";
 
@@ -7,25 +10,42 @@ import propTypes from "prop-types";
 
 import {List, ListItem, ListItemText} from "@material-ui/core";
 import styles from "./Chats.module.sass";
+import {messagesApi} from "../../api/request/messages";
 
-const uuid = () => faker.datatype.uuid();
+export const Chats = ({chats}) => {
 
-export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMessages}) => {
-    const handleRemove = (id) => {
-        removeChats(id);
-        removeMessages(id);
+    const [error, setError] = useState('');
+
+    const isLoading = useSelector(getChatLoading);
+
+    const handleRemove = async (id) => {
+        setError(null);
+
+        try {
+            await chatsApi.delete(id);
+            await messagesApi.delete(id);
+        } catch (err) {
+            setError(err);
+        }
+
     };
 
-    const handleAddButton = (value) => {
+    const handleAddButton = async (value) => {
         const item = {
-            id: uuid(),
             title: value.title,
             description: value.description,
             content: faker.lorem.paragraphs(),
         };
 
         if (value.title) {
-            addChats(item);
+
+            setError(null);
+
+            try {
+                await chatsApi.create(item);
+            } catch (err) {
+                setError(err);
+            }
         }
     };
 
@@ -68,7 +88,7 @@ export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMess
     return (
         <List className={styles.content}>
             {
-                chats.length ? chats.map(({id, title, description}) =>
+                chats.length ? chats?.map(({id, title, description}) =>
                     <ListItem key={id}>
                         <ListItemText primary={id}/>
                         <ListItemText primary={title}/>
@@ -103,6 +123,7 @@ export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMess
                                 type="text"
                             />
                             &nbsp;
+                            {error && <p>{error}</p>}
                             <button
                                 type="button"
                                 onClick={() => {
@@ -124,7 +145,7 @@ export const ChatsRender = ({isLoading, chats, addChats, removeChats, removeMess
     );
 };
 
-ChatsRender.propTypes = {
+Chats.propTypes = {
     chats: propTypes.arrayOf(propTypes.shape({
         id: propTypes.string,
         title: propTypes.string,
@@ -133,4 +154,3 @@ ChatsRender.propTypes = {
     }))
 };
 
-export const Chats = chatsConnect(ChatsRender);

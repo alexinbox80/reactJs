@@ -3,6 +3,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Link from "@material-ui/core/Link";
 import {Link as RouterLink} from "react-router-dom";
 import {makeStyles} from "@material-ui/core/styles";
+import {userApi} from "../../api/request/user";
 
 const useStyles = makeStyles((theme) => ({
     toolbarSecondary: {
@@ -46,23 +47,46 @@ export const Header = () => {
                 component={RouterLink}
                 color="inherit"
                 noWrap
-                key="async"
-                varint="body2"
-                to="/async"
-                className={classes.toolbarLink}
-            >
-                async
-            </Link>
-            <Link
-                component={RouterLink}
-                color="inherit"
-                noWrap
                 key="chats"
                 varint="body2"
                 to="/chats"
                 className={classes.toolbarLink}
             >
                 chats
+            </Link>
+            <Link
+                component={RouterLink}
+                color="inherit"
+                noWrap
+                key="signup"
+                varint="body2"
+                to="/signup"
+                className={classes.toolbarLink}
+            >
+                Sign Up
+            </Link>
+            <Link
+                component={RouterLink}
+                color="inherit"
+                noWrap
+                key="login"
+                varint="body2"
+                to="/login"
+                className={classes.toolbarLink}
+            >
+                Login
+            </Link>
+            <Link
+                component={RouterLink}
+                color="inherit"
+                noWrap
+                key="logout"
+                varint="body2"
+                to=""
+                className={classes.toolbarLink}
+                onClick={userApi.logout}
+            >
+                Logout
             </Link>
         </Toolbar>
     );

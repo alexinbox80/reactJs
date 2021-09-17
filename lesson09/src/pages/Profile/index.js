@@ -1,86 +1,74 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
-import {profileConnect} from "../../connects/profile";
+import {profileApi} from "../../api/request/profile";
 
 import styles from "./Profile.module.sass";
+//import {useHistory} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {getProfileLoading, profileSelectors} from "../../store/profile";
+import {getUser} from "../../store/user";
 
-import faker from "faker";
+export const Profile = () => {
+    const [userName, setUserName] = useState('');
+    const [error, setError] = useState('');
 
-import {Button, Checkbox, List, ListItem, ListItemText} from "@material-ui/core";
+    const currentUser = useSelector((state) => getUser(state));
+    const profile = useSelector((state) => profileSelectors.getProfile(state));
 
-export const ProfileRender = ({profile, createCheckbox, toggleCheckbox, deleteCheckbox, deleteChooseCheckbox}) => {
-    //console.log(profile);
+    useEffect(() => {
+        if (profile) {
+            //setUserName(profile.userName);
+        }
+    }, [])
 
-    const addCheckboxHandler = () => {
-        const uuid = () => faker.datatype.uuid();
+    const isLoading = useSelector((state) => getProfileLoading(state));
 
-        createCheckbox({
-            id: uuid(),
-            status: false,
-        });
-
+    const handleUserNameChange = (e) => {
+        setUserName(e.target.value);
     };
 
-    const deleteCheckboxHandler = (id) => {
-        deleteCheckbox(id);
-    };
+    const handleSubmit = async (e) => {
 
-    const deleteChooseCheckboxHandler = () => {
-        deleteChooseCheckbox(true);
+        e.preventDefault();
+        setError(null);
+        try {
+            const profileExist = profile.find((item) => item.uid === currentUser.uid);
+
+            if (profileExist) {
+                await profileApi.update({uid: currentUser.uid, userName: userName});
+            } else {
+                await profileApi.create({uid: currentUser.uid, userName: userName});
+            }
+            //push('/home');
+        } catch (error) {
+            console.log('Profile Form: ', error.message);
+            setError(error.message);
+        }
     };
 
     return (
-        <List className={styles.content}>
-
-            {
-                profile.map(({id, status}) => <ListItem key={id}>
-                        <ListItemText primary={`checkbox ${id}`} secondary={id}/>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                                deleteCheckboxHandler(id)
-                            }}
-                        >
-                            delete Checkbox
-                        </Button>
-                        <Checkbox
-                            checked={status}
-                            onChange={() => {
-                                toggleCheckbox(id, !status);
-                            }}
-                            inputProps={{'aria-label': 'primary checkbox'}}
-                        />
-                    </ListItem>
-                )
-            }
-
-            <ListItem key='0'>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        addCheckboxHandler()
-                    }}
-                >
-                    add Checkbox
-                </Button>
-                &nbsp;
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        deleteChooseCheckboxHandler()
-                    }}
-                >
-                    Delete Choose Checkbox
-                </Button>
-            </ListItem>
-        </List>
+        <div className={styles.content}>
+            <form onSubmit={handleSubmit}>
+                <p>Input Your Name.</p>
+                <div>
+                    <input
+                        placeholder="Input Name"
+                        name="userName"
+                        type="text"
+                        onChange={handleUserNameChange}
+                        value={userName}
+                    />
+                </div>
+                <div>
+                    {
+                        isLoading && <div>
+                            loading...
+                        </div>
+                    }
+                    {error && <p>{error}</p>}
+                    <button type="submit">Save</button>
+                </div>
+            </form>
+        </div>
     );
 };
-
-export const Profile  = profileConnect(ProfileRender);

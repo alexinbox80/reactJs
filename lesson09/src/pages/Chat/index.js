@@ -1,93 +1,42 @@
-import React, {useEffect} from "react";
-import {messagesConnect} from "../../connects/messages";
-import faker from "faker";
+import React, {useState} from "react";
+import {useSelector} from "react-redux";
 import propTypes from "prop-types";
+
+import {getMessagesLoadingStatusSelector, messagesSelectors} from "../../store/messages/selectors";
 
 import {MessageTitle} from "../../components/MessageTitle";
 import {MessageList} from "../../components/MessageList";
 
-//import {useDidUpdate} from "../../hooks/useDidUpdate";
+import {messagesApi} from "../../api/request/messages";
 
-const uuid = () => faker.datatype.uuid();
-
-const toHHMMSS = (mseconds) => (
-    new Date(mseconds)
-        .toTimeString()
-        .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
-);
-
-const SendMessage = (fn, message, chatId, nameBot) => {
-    useEffect(() => {
-        let messagesItem = {
-            chatId,
-            id: uuid(),
-            time: toHHMMSS(Date.now()),
-            text: message,
-            author: nameBot,
-        };
-        fn(messagesItem);
-    }, []);
-};
-
-export const ChatRender = (props) => {
+export const Chat = (props) => {
 
     const {
         chats,
-        messages,
-        isLoading,
-        removeMessage,
-        addMessage,
         ver,
-        chatId,
-        nameBot,
+        chatID,
+        nameUser,
     } = props;
 
-    const handleRemoveMessage = (messageId) => {
-        removeMessage(chatId, messageId);
-    };
+    const [error, setError] = useState('');
 
-    const currentChat = chats?.find(({id}) => id === chatId);
+    const messages = useSelector((state) => messagesSelectors.getMessages(state));
 
-    const DidHello = (chatId) => {
-        SendMessage(addMessage, 'Привет! я бот Петрович', chatId, nameBot);
-        SendMessage(addMessage, 'Как к Вам обращаться?', chatId, nameBot);
-    };
+    const isLoading = useSelector((state) => getMessagesLoadingStatusSelector(state));
 
-    if (chatId) {
-        DidHello(chatId);
-    }
+    const handleRemoveMessage = async (messageId) => {
+        setError(null);
 
-    /*useDidUpdate(() => {
-        const messageListLength = messages?.length;
-
-        if (messageListLength) {
-
-            if (messages[messageListLength - 1].author !== nameBot) {
-                const userText = messages[messageListLength - 1].text;
-
-                let messagesItem = {
-                    chatId,
-                    id: uuid(),
-                    time: toHHMMSS(Date.now()),
-                    text: 'Здравствуйте, ' + userText + '!',
-                    author: nameBot,
-                };
-
-                addMessage(messagesItem);
-
-                messagesItem = {
-                    chatId,
-                    id: uuid(),
-                    time: toHHMMSS(Date.now()),
-                    text: 'Чем могу помочь?',
-                    author: nameBot,
-                };
-
-                addMessage(messagesItem);
-            }
+        try {
+            await messagesApi.delete(messageId);
+        } catch (err) {
+            setError(err);
         }
-    }, [messages]);
-*/
+    };
+
+    const currentMessages = messages?.filter((item) => item.chatId === chatID);
+    const currentChat = chats?.find(({id}) => id === chatID);
+
     return (
         <>
             <MessageTitle
@@ -95,8 +44,8 @@ export const ChatRender = (props) => {
                 ver={ver}
             />
             <MessageList
-                messageList={messages}
-                nameBot={nameBot}
+                messageList={currentMessages}
+                nameUser={nameUser}
                 removeMessage={handleRemoveMessage}
             />
             {
@@ -104,19 +53,20 @@ export const ChatRender = (props) => {
                     loading...
                 </div>
             }
+            {
+                error && <div>
+                    {error.toString()}
+                </div>
+            }
         </>
     );
 };
 
-ChatRender.propTypes = {
+Chat.propTypes = {
     ver: propTypes.string.isRequired,
     chats: propTypes.array.isRequired,
-    chatId: propTypes.string.isRequired,
-    nameBot: propTypes.string.isRequired,
+    chatID: propTypes.string,
+    nameUser: propTypes.string.isRequired,
     isLoading: propTypes.bool,
-    removeMessage: propTypes.func.isRequired,
     messages: propTypes.array,
-    addMessage: propTypes.func.isRequired,
 };
-
-export const Chat = messagesConnect(ChatRender);
